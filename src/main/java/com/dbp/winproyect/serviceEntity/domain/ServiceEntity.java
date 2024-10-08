@@ -13,6 +13,4 @@ public class ServiceEntity {
     private String description;
     private String address;
     private Float avg_rating;
-
-
 }
