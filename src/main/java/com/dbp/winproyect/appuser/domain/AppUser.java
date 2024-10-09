@@ -1,5 +1,6 @@
 package com.dbp.winproyect.appuser.domain;
 
+import com.dbp.winproyect.location.domain.Location;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,11 @@ public class AppUser {
     private String phoneNumber;
     private Date registrationDate;
     private String address;
+
+
+    @OneToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
 
 
