@@ -1,8 +1,8 @@
 package com.dbp.winproyect.review.domain;
 
 
+import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
-import com.dbp.winproyect.user.domain.User;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -19,12 +19,12 @@ public class Review {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("service_id")
+    @JoinColumn(name = "service_id")
     private ServiceEntity serviceEntity;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("author_id")
-    private User author;        
+    @JoinColumn(name = "author_id")
+    private Client author;
+
 
 }

@@ -1,9 +1,13 @@
 package com.dbp.winproyect.serviceEntity.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.dbp.winproyect.arrangement.domain.Arrangement;
+import com.dbp.winproyect.provider.domain.Provider;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 public class ServiceEntity {
 
@@ -12,7 +16,19 @@ public class ServiceEntity {
     private Long id;
     private String description;
     private String address;
+    private Double suggestedPrice;
+
     private Float avg_rating;
+    //los tags xde eeeeeeeeeeeeeee ;
+    @ElementCollection
+    @CollectionTable(name = "service_tags", joinColumns = @JoinColumn(name = "service_id"))
+    @Column(name = "tag")
+    private Set<String> tags = new HashSet<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "providerja_id")
+    private Provider provider;
 
 
 }

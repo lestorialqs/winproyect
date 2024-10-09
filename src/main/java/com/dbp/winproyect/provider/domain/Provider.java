@@ -1,19 +1,18 @@
 package com.dbp.winproyect.provider.domain;
 
 
-import com.dbp.winproyect.user.domain.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.dbp.winproyect.appuser.domain.AppUser;
+import jakarta.persistence.*;
 import lombok.Data;
 
+@Data
 @Entity
 
-public class Provider extends User {
+public class Provider extends AppUser {
 
     private Boolean estate;
     private Float rating;
+
 
 
 

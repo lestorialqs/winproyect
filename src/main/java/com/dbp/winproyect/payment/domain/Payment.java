@@ -18,8 +18,7 @@ public class Payment {
     private Method method;
 
     @OneToOne
-
-    @MapsId("arrangement_id")
+    @JoinColumn(name = "arrangement_id")
     private Arrangement arrangement;
 
 

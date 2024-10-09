@@ -1,17 +1,15 @@
-package com.dbp.winproyect.user.domain;
+package com.dbp.winproyect.appuser.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 @Data
-public class User {
+@Table(name = "app_user")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
