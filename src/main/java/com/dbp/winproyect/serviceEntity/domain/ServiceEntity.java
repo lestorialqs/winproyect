@@ -3,11 +3,14 @@ package com.dbp.winproyect.serviceEntity.domain;
 import com.dbp.winproyect.arrangement.domain.Arrangement;
 import com.dbp.winproyect.provider.domain.Provider;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@Getter
+@Setter
 @Entity
 public class ServiceEntity {
 

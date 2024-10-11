@@ -14,6 +14,7 @@ public class Arrangement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LocalDate date;
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "client_id",nullable = false)

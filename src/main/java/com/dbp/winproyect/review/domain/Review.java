@@ -4,18 +4,21 @@ package com.dbp.winproyect.review.domain;
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
 import jakarta.persistence.*;
+import org.springframework.data.convert.Jsr310Converters;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String title;
     private String content;
-    private Timestamp date;
+    private LocalDateTime date;
     private Float rating;
+    private Boolean editable;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
