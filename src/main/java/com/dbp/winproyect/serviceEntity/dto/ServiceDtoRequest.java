@@ -1,6 +1,4 @@
-package com.dbp.winproyect.serviceEntity.domain;
-
-import java.util.List;
+package com.dbp.winproyect.serviceEntity.dto;
 
 public class ServiceDtoRequest {
 

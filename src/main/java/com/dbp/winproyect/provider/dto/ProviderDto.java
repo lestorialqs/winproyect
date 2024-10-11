@@ -1,6 +1,6 @@
-package com.dbp.winproyect.provider.providerdto;
+package com.dbp.winproyect.provider.dto;
 
-import com.dbp.winproyect.appuser.appuserdto.UserDto;
+import com.dbp.winproyect.appuser.dto.UserDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

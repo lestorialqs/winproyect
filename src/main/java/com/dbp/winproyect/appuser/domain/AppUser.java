@@ -33,28 +33,6 @@ public class AppUser {
 
     // aca hay mas atributos ? :c si pero pa q
 
-    @Data
-    public static class UserLoginDto {
-        private String email;
-        private String password;
-    }
 
-    @Data
-    public static class UserRequestDto { // Este DTO es para cuando el usuario se registra o actualiza su información. Sólo necesitas los datos básicos.
-        private String email;
-        private String password;
-        private String phoneNumber;
-        private String address;
-        private String type;  // Tipo de usuario: CLIENT o PROVIDER
-    }
 
-    @Data // Este DTO es para devolver la información del usuario después de realizar acciones como obtener el perfil o la información de contacto del usuario.
-    public static class UserResponseDto {
-        private Long id_user;
-        private String email;
-        private String phoneNumber;
-        private String address;
-        private String type;
-        private LocalDateTime registration_date;
-    }
 }
