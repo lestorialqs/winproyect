@@ -1,6 +1,5 @@
 package com.dbp.winproyect.arrangement.domain;
 
-import ch.qos.logback.core.status.Status;
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.payment.domain.Payment;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;

@@ -41,13 +41,16 @@ public class ServiceEntityService {
 
         return service;
     }
-
-    public void deleteService(Long id) {
-
-        serviceEntityRepository.deleteById(id);
-
-
+    public void deleteService(Long id){
+        ServiceEntity service = serviceEntityRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("No se encontró el servicio con id " + id));
+        serviceEntityRepository.delete(service);
     }
 
+    public void updateService(ServiceEntity serviceEntity, Long id) {//dto de patch, por id
+        //pasar los atributos del dto a un serviceEntity
+        //luego guardar:
 
+        serviceEntityRepository.save(serviceEntity);
+    }
 }
