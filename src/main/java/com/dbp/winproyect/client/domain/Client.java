@@ -14,6 +14,4 @@ import java.util.List;
 public class Client extends AppUser {
     private Integer dni;
     private Boolean showAds;
-
-
 }
