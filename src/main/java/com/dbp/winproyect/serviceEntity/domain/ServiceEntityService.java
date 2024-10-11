@@ -41,4 +41,13 @@ public class ServiceEntityService {
 
         return service;
     }
+
+    public void deleteService(Long id) {
+
+        serviceEntityRepository.deleteById(id);
+
+
+    }
+
+
 }
