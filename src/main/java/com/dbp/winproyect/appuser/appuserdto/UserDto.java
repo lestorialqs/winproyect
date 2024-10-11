@@ -1,4 +1,4 @@
-package com.dbp.winproyect.dto;
+package com.dbp.winproyect.appuser.appuserdto;
 
 
 import lombok.Data;

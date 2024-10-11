@@ -1,9 +1,10 @@
-package com.dbp.winproyect.dto;
+package com.dbp.winproyect.enterprise.domain.enterprisedto;
 
+import com.dbp.winproyect.appuser.domain.AppUser;
 import lombok.Data;
 
 @Data
-public class EnterpriseDto extends UserRequestDto {
+public class EnterpriseDto extends AppUser.UserRequestDto {
     private Long phoneNumber;
     private String address; // direccion
     private Integer rating;

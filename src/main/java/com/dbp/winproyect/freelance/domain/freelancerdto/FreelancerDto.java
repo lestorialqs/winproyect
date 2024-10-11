@@ -1,5 +1,6 @@
-package com.dbp.winproyect.dto;
+package com.dbp.winproyect.freelance.domain.freelancerdto;
 
+import com.dbp.winproyect.provider.providerdto.ProviderDto;
 import lombok.Data;
 
 @Data
