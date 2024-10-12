@@ -3,10 +3,9 @@ import org.springframework.util.ReflectionUtils;  // Importa esta línea
 
 import com.dbp.winproyect.enterprise.dto.EnterpriseDtoViewPerfilResponse;
 import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
-import com.dbp.winproyect.exeptions.ResourceNotFoundException;
+import com.dbp.winproyect.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 

@@ -40,6 +40,9 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+
+
+
         <!-- Dependencia de JWT (Versión 0.11.5 para evitar problemas con javax.xml.bind) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

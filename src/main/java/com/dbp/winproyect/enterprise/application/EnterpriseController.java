@@ -1,4 +1,4 @@
-package com.dbp.winproyect.enterprise.aplication;
+package com.dbp.winproyect.enterprise.application;
 
 import com.dbp.winproyect.enterprise.domain.EnterpriseService;
 import com.dbp.winproyect.enterprise.dto.EnterpriseDtoViewPerfilResponse;

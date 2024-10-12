@@ -1,10 +1,15 @@
 package com.dbp.winproyect.auth.service;
 
+import com.dbp.winproyect.appuser.domain.AppUser;
+import org.springframework.security.core.GrantedAuthority;
+
+
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +19,39 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Service
 public class JwtService {
 
     // Clave secreta para firmar los tokens JWT (puedes cambiarla por algo más seguro)
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     // Generar el token JWT usando el UserDetails del usuario
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(AppUser appUser) {
+        // Extraemos el email del usuario
+        String username = appUser.getEmail();
+
+        // Extraemos el rol (Client, Enterprise, Freelancer)
+        String role = appUser.getRole().name();  // Obtenemos el nombre del rol (CLIENT, ENTERPRISE, FREELANCE)
+
+        // Crear los claims (cualquier información adicional que quieras agregar al token)
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        claims.put("role", "ROLE_" + role);  // Añadir el prefijo ROLE_ al rol
+        // Incluimos el rol en los claims
+
+
+
+        // Crear el token JWT
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)  // El email o nombre de usuario
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // Expira en 10 horas
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 
     // Crear el token con claims (opcional) y el subject (que será el nombre de usuario)

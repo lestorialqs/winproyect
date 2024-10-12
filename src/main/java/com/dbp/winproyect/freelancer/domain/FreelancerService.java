@@ -1,11 +1,10 @@
 package com.dbp.winproyect.freelancer.domain;
 
-import com.dbp.winproyect.exeptions.ResourceNotFoundException;
+import com.dbp.winproyect.exceptions.ResourceNotFoundException;
 import com.dbp.winproyect.freelancer.dto.FreelancerDtoViewPerfilResponse;
 import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;

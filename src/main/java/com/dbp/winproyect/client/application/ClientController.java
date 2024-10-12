@@ -1,4 +1,4 @@
-package com.dbp.winproyect.client.aplication;
+package com.dbp.winproyect.client.application;
 
 import com.dbp.winproyect.client.domain.ClientService;
 import com.dbp.winproyect.client.dto.ClientDtoViewPerfilResponse;
