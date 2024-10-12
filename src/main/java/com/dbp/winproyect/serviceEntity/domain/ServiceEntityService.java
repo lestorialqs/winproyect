@@ -3,6 +3,7 @@ package com.dbp.winproyect.serviceEntity.domain;
 import com.dbp.winproyect.appuser.domain.Role;
 import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
 import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
+import com.dbp.winproyect.provider.domain.ProviderService;
 import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
 import com.dbp.winproyect.serviceEntity.dto.ServiceDtoResponse;
 import com.dbp.winproyect.serviceEntity.infrastructure.ServiceEntityRepository;
@@ -26,15 +27,16 @@ public class ServiceEntityService {
     private ProviderRepository providerRepository;
     @Autowired
     private FreelancerRepository freelancerRepository;
-
+    private final ProviderService providerService;
 
     private final ServiceEntityRepository serviceEntityRepository;
     @Autowired
     private EnterpriseRepository enterpriseRepository;
 
 
-    public ServiceEntityService( ServiceEntityRepository serviceEntityRepository) {
+    public ServiceEntityService( ServiceEntityRepository serviceEntityRepository, ProviderService providerService ) {
         this.serviceEntityRepository = serviceEntityRepository;
+        this.providerService = providerService;
     }
 
     //Permite a un proveedor publicar un servicio.
@@ -55,12 +57,13 @@ public class ServiceEntityService {
         ServiceEntity service = serviceEntityRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("No se encontro el servicio"));
         ServiceDtoResponse response = modelMapper.map(service, ServiceDtoResponse.class);
-        if(service.getProvider().getRole() == Role.ENTERPRISE){
-            response.setNameProvider(enterpriseRepository.findById(service.getProvider().getId()).get().getName());
-        }
+        response.setNameProvider(providerService.getProviderName(service.getProvider()));
 
         return response;
     }
+
+
+
     public void deleteService(Long id){
         ServiceEntity service = serviceEntityRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("No se encontró el servicio con id " + id));

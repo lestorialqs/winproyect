@@ -18,6 +18,7 @@ public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
     private String description;
     private String address;
     private Double suggestedPrice;
