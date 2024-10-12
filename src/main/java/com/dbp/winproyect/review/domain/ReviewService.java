@@ -66,7 +66,6 @@ public class ReviewService {
 
         // Setteando el newReview sin modelMapper (pq puede equivoacrse):
 
-
         newReview.setRating(reviewDtoCreateRequest.getRating());
         newReview.setComment(reviewDtoCreateRequest.getComment());
         newReview.setDate(ZonedDateTime.now());
@@ -76,16 +75,16 @@ public class ReviewService {
         return reviewRepository.save(newReview);
     }
 
+    // Para obtener Page (ordenable) de Reviews de un ServiceEntity por id de la ServiceEntity:
 //    public Page<Review> getAllReviewsByServiceEntity(Long serviceId, Pageable pageable){
 //        return reviewRepository.findByServiceEntityId(serviceId, pageable);
 //    }
 
     public void editReview(ReviewDtoEditRequest reviewDtoEditRequest, Long serviceId, Long reviewId) {
 
-
         // Obteniendo y Comprobando si existe la review a editar:
         Review reviewToEdit = reviewRepository.findById(reviewId).
-                orElseThrow(() -> new ResourceNotFoundException("Service not found"));
+                orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
         reviewToEdit.setRating(reviewDtoEditRequest.getRating());
         reviewToEdit.setComment(reviewDtoEditRequest.getComment());
@@ -99,11 +98,16 @@ public class ReviewService {
         // Falta revisar que el cliente editando la review es el creador de la review
 
         // Verificar si existen el Servicio y la Review correspondiente
-//        if (!serviceEntityRepository.existsById(serviceId))
-//            throw new ResourceNotFoundException("Service not found");
+        if (!serviceEntityRepository.existsById(serviceId))
+            throw new ResourceNotFoundException("Service not found");
 
-//        if (!reviewRepository.existsById(reviewId))
+        // Verificar si existe el Cliente que hizo la Review.
+        // Aunque ya dijimos que se puede eliminar el Client y quedar la Review
+//        if (!clientRepository.existsById(reviewId))
 //            throw new ResourceNotFoundException("Review not found");
+
+        if (!reviewRepository.existsById(reviewId))
+            throw new ResourceNotFoundException("Review not found");
 
         reviewRepository.deleteById(reviewId);
     }
