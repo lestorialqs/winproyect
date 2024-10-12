@@ -9,7 +9,7 @@ import com.dbp.winproyect.auth.dto.EnterpriseDtoRegister;
 import com.dbp.winproyect.auth.dto.FreelancerDtoRegister;
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.enterprise.domain.Enterprise;
-import com.dbp.winproyect.freelance.domain.Freelance;
+import com.dbp.winproyect.freelancer.domain.Freelance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

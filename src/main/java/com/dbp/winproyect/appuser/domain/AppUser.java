@@ -21,6 +21,7 @@ public class AppUser {
     private String phoneNumber;
     private Date registrationDate;
     private String address;
+    private Role role;
 
 
     @OneToOne

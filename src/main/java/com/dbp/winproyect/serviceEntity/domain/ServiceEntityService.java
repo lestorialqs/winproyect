@@ -1,20 +1,36 @@
 package com.dbp.winproyect.serviceEntity.domain;
 
+import com.dbp.winproyect.appuser.domain.Role;
+import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
+import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
+import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
+import com.dbp.winproyect.serviceEntity.dto.ServiceDtoResponse;
 import com.dbp.winproyect.serviceEntity.infrastructure.ServiceEntityRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 
 public class ServiceEntityService {
 
-    private final ServiceEntityRepository serviceEntityRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private ServiceEntityRepository repository;
+    @Autowired
+    private ProviderRepository providerRepository;
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+
+    private final ServiceEntityRepository serviceEntityRepository;
+    @Autowired
+    private EnterpriseRepository enterpriseRepository;
 
 
     public ServiceEntityService( ServiceEntityRepository serviceEntityRepository) {
@@ -34,12 +50,16 @@ public class ServiceEntityService {
         return serviceEntityRepository.findAll(pageable);
     }
     //obtener un servicio por id
-    public ServiceEntity obtenerServicio(Long id) { //retornar dto
+    public ServiceDtoResponse obtenerServicio(Long id) { //retornar dto
 
         ServiceEntity service = serviceEntityRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("No se encontro el servicio"));
+        ServiceDtoResponse response = modelMapper.map(service, ServiceDtoResponse.class);
+        if(service.getProvider().getRole() == Role.ENTERPRISE){
+            response.setNameProvider(enterpriseRepository.findById(service.getProvider().getId()).get().getName());
+        }
 
-        return service;
+        return response;
     }
     public void deleteService(Long id){
         ServiceEntity service = serviceEntityRepository.findById(id)

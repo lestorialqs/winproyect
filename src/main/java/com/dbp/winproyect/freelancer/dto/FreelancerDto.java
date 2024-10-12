@@ -1,4 +1,4 @@
-package com.dbp.winproyect.freelance.dto;
+package com.dbp.winproyect.freelancer.dto;
 
 import lombok.Data;
 
