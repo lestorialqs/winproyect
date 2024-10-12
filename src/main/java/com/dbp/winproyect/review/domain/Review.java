@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,8 +19,8 @@ public class Review {
     private long id;
     private Integer rating;
     private String comment;
-    private String date;
-    private Boolean edited;
+    private ZonedDateTime date;
+    private Boolean edited = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)

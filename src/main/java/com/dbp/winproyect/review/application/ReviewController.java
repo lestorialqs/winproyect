@@ -2,6 +2,7 @@ package com.dbp.winproyect.review.application;
 
 import com.dbp.winproyect.review.domain.Review;
 import com.dbp.winproyect.review.domain.ReviewService;
+import com.dbp.winproyect.review.dto.ReviewDtoCreateRequest;
 import com.dbp.winproyect.review.dto.ReviewDtoEditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,12 +24,12 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-
-    @PostMapping("/{id}/review")
-    public ResponseEntity<Review> createReview(@RequestBody Review review, @PathVariable Long serviceId) {
-        reviewService.saveReview(review, serviceId);
-        URI location = URI.create("/{id}/review" + review.getId());
-        return ResponseEntity.created(location).build();
+    @PostMapping("/{serviceId}/review")
+    public ResponseEntity<Review> createReview(@RequestBody ReviewDtoCreateRequest reviewDtoCreateRequest,
+                                               @PathVariable Long serviceId) {
+        Review newReview = reviewService.saveReview(reviewDtoCreateRequest, serviceId);
+        URI location = URI.create("/{id}/review" + newReview.getId());
+        return ResponseEntity.created(location).body(newReview);
     }
 
     // El pageable permite ordenar los resultados al traerlos con un Get
@@ -38,10 +39,10 @@ public class ReviewController {
     // sort: el atributo por el cual se ordena:
     //      se usa por ej "amount,asc" para un sort por monto en ascendente.
     //      y se usa "amount,desc" para un sort por monto descendente
-    @GetMapping("/{serviceId}/review")
-    public ResponseEntity<Page<Review>> getAllReviews(@PathVariable Long serviceId, Pageable pageable) {
-        return ResponseEntity.ok(reviewService.getAllReviewsByServiceEntity(serviceId, pageable));
-    }
+//    @GetMapping("/{serviceId}/review")
+//    public ResponseEntity<Page<Review>> getAllReviews(@PathVariable Long serviceId, Pageable pageable) {
+//        return ResponseEntity.ok(reviewService.getAllReviewsByServiceEntity(serviceId, pageable));
+//    }
 
     @PatchMapping("/{serviceId}/review/{reviewId}")
     public ResponseEntity<Void> editReview(@RequestBody ReviewDtoEditRequest reviewDtoEditRequest,

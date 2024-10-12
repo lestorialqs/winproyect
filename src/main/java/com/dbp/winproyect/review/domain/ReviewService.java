@@ -2,11 +2,14 @@ package com.dbp.winproyect.review.domain;
 
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.client.infrastructure.ClientRepository;
+import com.dbp.winproyect.exceptions.ResourceNotFoundException;
+import com.dbp.winproyect.review.dto.ReviewDtoCreateRequest;
 import com.dbp.winproyect.review.dto.ReviewDtoEditRequest;
 import com.dbp.winproyect.review.infrastructure.ReviewRepository;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
 import com.dbp.winproyect.serviceEntity.infrastructure.ServiceEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 
 
 @Service
@@ -36,41 +40,58 @@ public class ReviewService {
         this.clientRepository = clientRepository;
     }
 
-    public void saveReview(Review newReview, Long serviceId) {
-        ServiceEntity service = serviceEntityRepository.
-                findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
-        Client client = clientRepository.findById(newReview.getClient().getId()).get();
+    public Review saveReview(ReviewDtoCreateRequest reviewDtoCreateRequest, Long serviceId) {
+
+        // Obteniendo y Comprobando si existe la review a editar:
+        Review newReview = new Review();
+
+        // Comprobando si existe el Servicio:
+//        Optional<ServiceEntity> service = serviceEntityRepository.
+//                findById(serviceId).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
+
+        // Comprobando si existe el Cliente:
+//        Optional<Client> client = clientRepository.findById(reviewDtoCreateRequest.getUserId()).
+//                orElseThrow(() -> new ResourceNotFoundException("Service not found"));
 
         // Obteniendo fecha y darle formato de 12-10-2024 12:51:21 PM
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
 
-        DateFormatSymbols symbols = new DateFormatSymbols(Locale.getDefault());
-        symbols.setAmPmStrings(new String[] { "AM", "PM" });
-        sdf.setDateFormatSymbols(symbols);
-        String formattedDate = sdf.format(new Date());
-        System.out.println(formattedDate);
+//        DateFormatSymbols symbols = new DateFormatSymbols(Locale.getDefault());
+//        symbols.setAmPmStrings(new String[] { "AM", "PM" });
+//        sdf.setDateFormatSymbols(symbols);
+//        String formattedDate = sdf.format(new Date());
+//        System.out.println(formattedDate);
+//
+//        newReview.setDate(formattedDate);
 
-        newReview.setEdited(false);
-        newReview.setDate(formattedDate);
-        newReview.setServiceEntity(service);
-        newReview.setClient(client);
-        reviewRepository.save(newReview);
+        // Setteando el newReview sin modelMapper (pq puede equivoacrse):
 
+
+        newReview.setRating(reviewDtoCreateRequest.getRating());
+        newReview.setComment(reviewDtoCreateRequest.getComment());
+        newReview.setDate(ZonedDateTime.now());
+        newReview.setServiceEntity(serviceEntityRepository.findById(serviceId).get());
+        newReview.setClient(clientRepository.findById(reviewDtoCreateRequest.getUserId()).get());
+
+        return reviewRepository.save(newReview);
     }
 
-    public Page<Review> getAllReviewsByServiceEntity(Long serviceId, Pageable pageable){
-        return reviewRepository.findByServiceEntityId(serviceId, pageable);
-    }
+//    public Page<Review> getAllReviewsByServiceEntity(Long serviceId, Pageable pageable){
+//        return reviewRepository.findByServiceEntityId(serviceId, pageable);
+//    }
 
     public void editReview(ReviewDtoEditRequest reviewDtoEditRequest, Long serviceId, Long reviewId) {
 
-        Review review = reviewRepository.findById(reviewId).get();
-//                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        review.setRating(reviewDtoEditRequest.getRating());
-        review.setComment(reviewDtoEditRequest.getComment());
+        // Obteniendo y Comprobando si existe la review a editar:
+        Review reviewToEdit = reviewRepository.findById(reviewId).
+                orElseThrow(() -> new ResourceNotFoundException("Service not found"));
 
-        reviewRepository.save(review);
+        reviewToEdit.setRating(reviewDtoEditRequest.getRating());
+        reviewToEdit.setComment(reviewDtoEditRequest.getComment());
+        reviewToEdit.setDate(ZonedDateTime.now());
+
+        reviewRepository.save(reviewToEdit);
     }
 
     public void deleteReview(Long serviceId, Long reviewId) {
