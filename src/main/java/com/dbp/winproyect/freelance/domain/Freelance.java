@@ -5,8 +5,6 @@ import com.dbp.winproyect.provider.domain.Provider;
 import jakarta.persistence.Entity;
 import lombok.Data;
 
-import java.io.Serializable;
-
 
 @Data
 @Entity

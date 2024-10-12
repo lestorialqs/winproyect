@@ -1,4 +1,4 @@
-package com.dbp.winproyect.enterprise.domain.dto;
+package com.dbp.winproyect.enterprise.dto;
 
 import com.dbp.winproyect.enterprise.domain.BusinessSector;
 import lombok.Data;
