@@ -3,6 +3,7 @@ package com.dbp.winproyect.serviceEntity.dto;
 import com.dbp.winproyect.review.domain.Review;
 import com.dbp.winproyect.tag.domain.Tag;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -21,8 +22,7 @@ public class ServiceDtoResponse {
 
     private Float avg_rating;
 
-
-    private List<Review> reviewList;
+    private Page<Review> pageableReviews;
 
     private Set<Tag> tagsList;
 

@@ -32,8 +32,11 @@ public class ServiceEntityController {
         return ResponseEntity.created(uri).build();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ServiceDtoResponse> getServiceById(@PathVariable("id") Long id) {
-        ServiceDtoResponse response = serviceEntityService.obtenerServicio(id);
+    public ResponseEntity<ServiceDtoResponse> getServiceById(@PathVariable("id") Long id,
+                    @RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
+                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                    @RequestParam(value = "sort", defaultValue = "rating", required = false) String sort){
+        ServiceDtoResponse response = serviceEntityService.obtenerServicio(id, pageNo, pageSize, sort);
         return ResponseEntity.ok(response);
 
     }

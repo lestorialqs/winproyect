@@ -76,9 +76,10 @@ public class ReviewService {
     }
 
     // Para obtener Page (ordenable) de Reviews de un ServiceEntity por id de la ServiceEntity:
-//    public Page<Review> getAllReviewsByServiceEntity(Long serviceId, Pageable pageable){
-//        return reviewRepository.findByServiceEntityId(serviceId, pageable);
-//    }
+    public Page<Review> getAllReviewsByServiceId(Long serviceId, Pageable pageable){
+
+        return reviewRepository.findByServiceEntityId(serviceId, pageable);
+    }
 
     public void editReview(ReviewDtoEditRequest reviewDtoEditRequest, Long serviceId, Long reviewId) {
 
