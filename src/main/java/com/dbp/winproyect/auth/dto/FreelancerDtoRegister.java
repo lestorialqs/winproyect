@@ -12,7 +12,7 @@ public class FreelancerDtoRegister{
     @NotNull
     private String lastName;
     @NotNull
-    @Email
+    @Email(message = "Debes proporcionar un correo electrónico válido")
     private String email;
     @NotNull
     private String address;

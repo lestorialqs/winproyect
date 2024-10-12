@@ -1,12 +1,15 @@
 package com.dbp.winproyect.provider.domain;
 
+
 import com.dbp.winproyect.enterprise.domain.Enterprise;
+
 import com.dbp.winproyect.appuser.domain.Role;
 import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
 import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dbp.winproyect.enterprise.domain.Enterprise;
 
 @Service
 public class ProviderService {
@@ -31,5 +34,7 @@ public class ProviderService {
         }
         return "Proveedor no identificado"; // Caso por defecto
     }
-
 }
+
+
+
