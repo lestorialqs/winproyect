@@ -10,10 +10,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "app_user")
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Setter
-@Getter
+
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
 
@@ -31,10 +28,6 @@ public class AppUser {
     @OneToOne
     @JoinColumn(name = "location_id")
     private Location location;
-
-    public void setFirstName(String s) {
-        this.fir
-    }
 
 
     // aca hay mas atributos ? :c si pero pa q
