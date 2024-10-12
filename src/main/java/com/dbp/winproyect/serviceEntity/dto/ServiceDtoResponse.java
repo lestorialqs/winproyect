@@ -1,9 +1,12 @@
 package com.dbp.winproyect.serviceEntity.dto;
 
 import com.dbp.winproyect.review.domain.Review;
+import com.dbp.winproyect.tag.domain.Tag;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
+
 @Data
 public class ServiceDtoResponse {
     private String name;
@@ -14,8 +17,13 @@ public class ServiceDtoResponse {
 
     private String address;
 
-    private Float rating;
+    private Double suggestedPrice;
+
+    private Float avg_rating;
+
 
     private List<Review> reviewList;
+
+    private Set<Tag> tagsList;
 
 }

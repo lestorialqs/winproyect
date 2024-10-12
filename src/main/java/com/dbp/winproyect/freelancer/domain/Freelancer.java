@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Freelance extends Provider {
+public class Freelancer extends Provider {
 
     private String firstName;
     private String lastName;
