@@ -38,8 +38,7 @@ public class ReviewService {
     public void saveReview(Review newReview, Long serviceId) {
         ServiceEntity service = serviceEntityRepository.
                 findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
-        Client client = clientRepository.
-                findById(newReview.getClient().getId()).get();
+        Client client = clientRepository.findById(newReview.getClient().getId()).get();
 
         // Obteniendo fecha y darle formato de 12-10-2024 12:51:21 PM
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
