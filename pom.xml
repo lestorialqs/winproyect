@@ -30,6 +30,7 @@
         <java.version>22</java.version>
     </properties>
     <dependencies>
+
         <!-- Dependencias de Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -39,6 +40,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.pusher</groupId>
+            <artifactId>pusher-http-java</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 
         <!-- Dependencia de JWT (Versión 0.11.5 para evitar problemas con javax.xml.bind) -->
         <dependency>
