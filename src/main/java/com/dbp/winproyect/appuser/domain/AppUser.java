@@ -2,7 +2,7 @@ package com.dbp.winproyect.appuser.domain;
 
 import com.dbp.winproyect.location.domain.Location;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,6 +10,10 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "app_user")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Setter
+@Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
 
@@ -28,6 +32,9 @@ public class AppUser {
     @JoinColumn(name = "location_id")
     private Location location;
 
+    public void setFirstName(String s) {
+        this.fir
+    }
 
 
     // aca hay mas atributos ? :c si pero pa q
