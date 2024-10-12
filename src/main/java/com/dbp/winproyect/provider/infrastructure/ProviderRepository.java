@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface ProviderRepository extends JpaRepository<Provider, Long> {
+public interface git ProviderRepository extends JpaRepository<Provider, Long> {
     Optional<Provider> findByEmail(String email);
 }

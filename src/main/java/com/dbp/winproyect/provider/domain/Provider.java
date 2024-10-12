@@ -20,9 +20,4 @@ public class Provider extends AppUser {
     private Float rating;
 
 
-
-
-
-
-
 }
