@@ -38,7 +38,7 @@ public class ProviderRepositoryTest extends AbstractContainerBaseTest {
         client1 = new Client();
         client1.setFirstName("Client 1");
         client1.setLastName("Lastname 1");
-        client1.setDni(123456);
+        client1.setDni(939779068L);
         client1.setEmail("client1@test.com");
         client1.setShowAds(true);
 

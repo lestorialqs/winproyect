@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
-@NoArgsConstructor
-@RequiredArgsConstructor
+//@NoArgsConstructor
+//@RequiredArgsConstructor
 
 public class Provider extends AppUser {
     private Long ruc;
