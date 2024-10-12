@@ -12,6 +12,9 @@ import java.util.List;
 @Data
 @Entity
 public class Client extends AppUser {
+
+    private String firstName;
+    private String lastName;
     private Integer dni;
     private Boolean showAds;
 }
