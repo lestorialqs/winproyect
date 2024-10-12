@@ -10,6 +10,4 @@ import org.springframework.data.domain.Page;
 @Repository
 public interface ServiceEntityRepository extends JpaRepository<ServiceEntity, Long> {
 
-
-    Page<ServiceEntity> findAll(Pageable pageable);
 }

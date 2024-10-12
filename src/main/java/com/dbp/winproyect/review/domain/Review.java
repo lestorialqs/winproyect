@@ -5,8 +5,9 @@ import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class Review {
     private long id;
     private Float rating;
     private String comment;
-    private ZonedDateTime date;
+    private String date;
     private Boolean edited;
 
     @ManyToOne(fetch = FetchType.LAZY)
