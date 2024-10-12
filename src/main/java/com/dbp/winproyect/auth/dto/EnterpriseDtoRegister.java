@@ -17,6 +17,4 @@ public class EnterpriseDtoRegister {
     private BusinessSector businessSector;
     @NotNull
     private Size size;
-
-
 }

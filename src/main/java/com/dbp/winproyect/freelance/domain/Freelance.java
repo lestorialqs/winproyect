@@ -14,7 +14,7 @@ public class Freelance extends Provider {
     private String lastName;
     private Integer age;
     private Integer dni;
-    private Integer experience;
+    private String experience;
     private LevelEducation levelEducation;
 
 

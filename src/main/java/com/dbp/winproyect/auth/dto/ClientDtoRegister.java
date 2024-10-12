@@ -22,7 +22,6 @@ public class ClientDtoRegister {
     @NotNull
     private String lastName;
 
-
     private Long dni;
 
 
