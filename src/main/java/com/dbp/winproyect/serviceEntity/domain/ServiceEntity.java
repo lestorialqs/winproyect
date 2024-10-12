@@ -2,6 +2,7 @@ package com.dbp.winproyect.serviceEntity.domain;
 
 import com.dbp.winproyect.arrangement.domain.Arrangement;
 import com.dbp.winproyect.provider.domain.Provider;
+import com.dbp.winproyect.tag.domain.Tag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +24,13 @@ public class ServiceEntity {
 
     private Float avg_rating;
 
-    //los tags xde eeeeeeeeeeeeeee ;
-    @ElementCollection
-    @CollectionTable(name = "service_tags", joinColumns = @JoinColumn(name = "service_id"))
-    @Column(name = "tag")
-    private Set<String> tags = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "service_tags",
+            joinColumns = @JoinColumn(name = "service_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
 
     @ManyToOne

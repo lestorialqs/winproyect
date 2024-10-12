@@ -1,10 +1,9 @@
-package com.dbp.winproyect.freelance.domain.dto;
+package com.dbp.winproyect.freelancer.dto;
 
-import com.dbp.winproyect.provider.dto.ProviderDto;
 import lombok.Data;
 
 @Data
-public class FreelancerDto extends ProviderDto {
+public class FreelancerDto {
     private String firstName;
     private String lastName;
     private String speciality;

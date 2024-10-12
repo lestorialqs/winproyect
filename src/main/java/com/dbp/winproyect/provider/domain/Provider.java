@@ -14,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public class Provider extends AppUser {
-    @Nonnull
+    private Long ruc;
     private Boolean estate;
-    @Nonnull
     private Float rating;
-
-
+    private double comission;
 }
