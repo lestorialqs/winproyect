@@ -13,7 +13,6 @@ public class EnterpriseResponseDto {
     private String phoneNumber;
     private Integer rating;
     private BusinessSector businessSector;
-    private String name;
     private Integer experienceInYears;  // Calculado a partir de `experience
 
 
