@@ -58,8 +58,8 @@ public class ReviewService {
 
     }
 
-    public Page<Review> getAll(Pageable pageable){
-        return reviewRepository.findAll(pageable);
+    public Page<Review> getAllReviewsByServiceEntity(Long serviceId, Pageable pageable){
+        return reviewRepository.findByServiceEntityId(serviceId, pageable);
     }
 
     public void editReview(ReviewDtoEditRequest reviewDtoEditRequest, Long serviceId, Long reviewId) {

@@ -38,9 +38,9 @@ public class ReviewController {
     // sort: el atributo por el cual se ordena:
     //      se usa por ej "amount,asc" para un sort por monto en ascendente.
     //      y se usa "amount,desc" para un sort por monto descendente
-    @GetMapping("/{id}/review")
-    public Page<Review> getAllReviews(Pageable pageable) {
-        return reviewService.getAll(pageable);
+    @GetMapping("/{serviceId}/review")
+    public ResponseEntity<Page<Review>> getAllReviews(@PathVariable Long serviceId, Pageable pageable) {
+        return ResponseEntity.ok(reviewService.getAllReviewsByServiceEntity(serviceId, pageable));
     }
 
     @PatchMapping("/{serviceId}/review/{reviewId}")
@@ -55,7 +55,5 @@ public class ReviewController {
         reviewService.deleteReview(serviceId, reviewId);
         return ResponseEntity.noContent().build();
     }
-
-
 
 }
