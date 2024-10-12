@@ -21,12 +21,16 @@ public class AppUser {
     private String phoneNumber;
     private Date registrationDate;
     private String address;
-    private Rol rol;
+    private Role role;
+
 
     @OneToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
+
+
+    // aca hay mas atributos ? :c si pero pa q
 
 
 

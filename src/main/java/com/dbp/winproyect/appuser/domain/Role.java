@@ -1,5 +1,5 @@
 package com.dbp.winproyect.appuser.domain;
 
-public enum Rol {
+public enum Role {
     CLIENT, ENTERPRISE, FREELANCE
 }

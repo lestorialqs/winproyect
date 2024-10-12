@@ -1,4 +1,4 @@
-package com.dbp.winproyect.freelance.domain;
+package com.dbp.winproyect.freelancer.domain;
 
 
 import com.dbp.winproyect.provider.domain.Provider;
