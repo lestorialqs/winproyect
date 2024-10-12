@@ -16,10 +16,7 @@ import com.dbp.winproyect.tag.domain.ServiceTag;
 import com.dbp.winproyect.tag.domain.TagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -106,14 +103,16 @@ public class ServiceEntityService {
         return dtoResponses;
     }
     //obtener un servicio por id
-    public ServiceDtoResponse obtenerServicio(Long id) { //retornar dto
+    public ServiceDtoResponse obtenerServicio(Long id, Integer pageNo, Integer pageSize, String sort) { //retornar dto
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort).descending());
 
         ServiceEntity service = serviceEntityRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("No se encontro el servicio"));
         ServiceDtoResponse response = modelMapper.map(service, ServiceDtoResponse.class);
         response.setNameProvider(providerService.getProviderName(service.getProvider()));
         response.setTagsList(tagService.findByServiceId(service.getId()));
-        response.setReviewList(reviewService.findAllByServiceId(service.getId()));
+        response.setPageableReviews(reviewService.getAllReviewsByServiceId(id, pageable));
         return response;
     }
 
