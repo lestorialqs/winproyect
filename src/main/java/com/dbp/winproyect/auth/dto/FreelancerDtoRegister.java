@@ -19,5 +19,7 @@ public class FreelancerDtoRegister{
     @NotNull
     private Long dni;
     @NotNull
+    private Long phoneNumber;
+    @NotNull
     private String password;
 }

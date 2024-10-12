@@ -15,6 +15,6 @@ public class Client extends AppUser {
 
     private String firstName;
     private String lastName;
-    private Integer dni;
+    private Long dni;
     private Boolean showAds;
 }
