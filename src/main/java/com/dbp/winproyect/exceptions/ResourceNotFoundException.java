@@ -1,4 +1,4 @@
-package com.dbp.winproyect.exeptions;
+package com.dbp.winproyect.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

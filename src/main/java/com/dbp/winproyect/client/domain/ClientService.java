@@ -2,7 +2,7 @@ package com.dbp.winproyect.client.domain;
 
 import com.dbp.winproyect.client.dto.ClientDtoViewPerfilResponse;
 import com.dbp.winproyect.client.infrastructure.ClientRepository;
-import com.dbp.winproyect.exeptions.ResourceNotFoundException;
+import com.dbp.winproyect.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
