@@ -11,6 +11,7 @@ public class Enterprise extends Provider {
     private String name;
     private String description;
     private BusinessSector businessSector;
+    private Size size;
 
 
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 @Entity
 
 public class Provider extends AppUser {
-
+    private Long ruc;
     private Boolean estate;
     private Float rating;
 
