@@ -16,7 +16,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Float rating;
+    private Integer rating;
     private String comment;
     private String date;
     private Boolean edited;

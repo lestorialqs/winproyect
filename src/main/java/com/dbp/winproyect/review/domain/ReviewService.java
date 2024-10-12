@@ -2,6 +2,7 @@ package com.dbp.winproyect.review.domain;
 
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.client.infrastructure.ClientRepository;
+import com.dbp.winproyect.review.dto.ReviewDtoEditRequest;
 import com.dbp.winproyect.review.infrastructure.ReviewRepository;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
 import com.dbp.winproyect.serviceEntity.infrastructure.ServiceEntityRepository;
@@ -59,6 +60,31 @@ public class ReviewService {
 
     public Page<Review> getAll(Pageable pageable){
         return reviewRepository.findAll(pageable);
+    }
+
+    public void editReview(ReviewDtoEditRequest reviewDtoEditRequest, Long serviceId, Long reviewId) {
+
+        Review review = reviewRepository.findById(reviewId).get();
+//                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+        review.setRating(reviewDtoEditRequest.getRating());
+        review.setComment(reviewDtoEditRequest.getComment());
+
+        reviewRepository.save(review);
+    }
+
+    public void deleteReview(Long serviceId, Long reviewId) {
+
+        // Falta revisar que el cliente editando la review es el creador de la review
+
+        // Verificar si existen el Servicio y la Review correspondiente
+//        if (!serviceEntityRepository.existsById(serviceId))
+//            throw new ResourceNotFoundException("Service not found");
+
+//        if (!reviewRepository.existsById(reviewId))
+//            throw new ResourceNotFoundException("Review not found");
+
+        reviewRepository.deleteById(reviewId);
     }
 
 }
