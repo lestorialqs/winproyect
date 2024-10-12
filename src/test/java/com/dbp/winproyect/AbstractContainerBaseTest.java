@@ -1,6 +1,7 @@
 package com.dbp.winproyect;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
 @DataJpaTest
@@ -21,5 +22,3 @@ public abstract class AbstractContainerBaseTest {
         registry.add("spring.datasource.password", postgresqlContainer::getPassword);
     }
 }
-© 2024 Departamento Ciencia de Computación - Universidad de Ingeniería y Tecnología 11
-
