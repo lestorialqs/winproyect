@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class EnterpriseDto extends UserRequestDto {
-    private String phoneNumber;
-    private String address; // direccion
+    private String RUC;
+    private String email;
     private Integer rating;
-    private String category;
+    private String password;
     private String name;
     private String experience;
 }
