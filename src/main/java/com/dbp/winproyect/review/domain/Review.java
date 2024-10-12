@@ -25,8 +25,8 @@ public class Review {
     private ServiceEntity serviceEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    @JoinColumn(name = "author_id", nullable = false)
+    private Client author;
 
 
 }

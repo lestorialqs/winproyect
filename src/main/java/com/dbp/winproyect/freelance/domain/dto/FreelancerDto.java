@@ -7,8 +7,9 @@ import lombok.Data;
 public class FreelancerDto extends ProviderDto {
     private String firstName;
     private String lastName;
-    private String speciality;
-    private String experience;
+    private String email;
+    private String phoneNumber;
+    private String address;
     private String grade;
     private Long dni;
 }
