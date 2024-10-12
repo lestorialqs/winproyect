@@ -12,6 +12,7 @@ public class Provider extends AppUser {
 
     private Boolean estate;
     private Float rating;
+    private String ruc;
 
 
 
