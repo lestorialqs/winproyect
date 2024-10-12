@@ -2,45 +2,46 @@
 
 ## CS 2031 Desarrollo Basado en Plataformas
 
-![Descripción de la imagen](https://lh3.googleusercontent.com/XjT_KCRn096aRrRrR_scjHHW7K7rEjAl-0mOgW2RL13LTKUattb3EfV1uEKJiKIG_rNXx310vfURFn7EcULm6q0=w1280)
+![Descripción de la imagen](https://lh3.googleusercontent.com/LDCxZNaQyYHPSnggss4PuX6dUCnletxobqQ0un_x1mZv_5s8uX9OT1TwkRJqvBZY8cfjflovHe1ChiPsWFTI3KU=w1280)
+
 
 ### Integrantes
 - Sebastian Antonio Hernandez Miñano
-- Henry Rutber Quispe Suta
-- Andres Martin Benjamin Torres Ramos
+- Henry Rutber Quispe Sutta
+- Andrés Martín Benjamín Torres Ramos
 - Luis Javier Millones Carrasco
 
 ## Índice
 
 1. [**Introducción**](##Introducción)
-   - [Contexto](###Contexto)
-   - [Objetivos del proyecto](###Objetivos-del-proyecto)
+    - [Contexto](###Contexto)
+    - [Objetivos del proyecto](###Objetivos-del-proyecto)
 2. [**Problema**](#problema)
-   - [Descripción del problema](#descripción-del-problema)
-   - [Justificación](#justificación)
+    - [Descripción del problema](#descripción-del-problema)
+    - [Justificación](#justificación)
 3. [**Descripción de la solución**](#descripción-de-la-solución)
-   - [Funcionalidades Implementadas](#funcionalidades-implementadas)
-   - [Tecnologías implementadas](#tecnologías-implementadas)
+    - [Funcionalidades Implementadas](#funcionalidades-implementadas)
+    - [Tecnologías implementadas](#tecnologías-implementadas)
 4. [**Modelado de Entidades**](#modelado-de-entidades)
-   - [Diagrama de entidades](#diagrama-de-entidades)
-   - [Descripción de entidades](#descripción-de-entidades)
-     - [User](#user)
-     - [Provider](#provider)
-     - [Freelancer](#freelancer)
-     - [Enterprise](#enterprise)
-     - [Client](#client)
-     - [Location](#location)
-     - [Arrangement](#arrangement)
-     - [Payment](#payment)
-     - [ServiceEntity](#serviceentity)
-     - [Review](#review)
+    - [Diagrama de entidades](#diagrama-de-entidades)
+    - [Descripción de entidades](#descripción-de-entidades)
+        - [User](#user)
+        - [Provider](#provider)
+        - [Freelancer](#freelancer)
+        - [Enterprise](#enterprise)
+        - [Client](#client)
+        - [Location](#location)
+        - [Arrangement](#arrangement)
+        - [Payment](#payment)
+        - [ServiceEntity](#serviceentity)
+        - [Review](#review)
 5. [**Testing y Manejo de Errores**](#testing-y-manejo-de-errores)
-   - [Niveles de Testing Realizados](#niveles-de-testing-realizados)
-   - [Resultados](#resultados)
-   - [Manejo de errores](#manejo-de-errores)
+    - [Niveles de Testing Realizados](#niveles-de-testing-realizados)
+    - [Resultados](#resultados)
+    - [Manejo de errores](#manejo-de-errores)
 6. [**Medidas de Seguridad Implementadas**](#medidas-de-seguridad-implementadas)
-   - [Seguridad de Datos](#seguridad-de-datos)
-   - [Prevención de Vulnerabilidades](#prevención-de-vulnerabilidades)
+    - [Seguridad de Datos](#seguridad-de-datos)
+    - [Prevención de Vulnerabilidades](#prevención-de-vulnerabilidades)
 7. [**Eventos y Asincronía**](#eventos-y-asincronía)
 8. [**GitHub**](#github)
 9. [**Conclusiones**](#conclusiones)
@@ -112,39 +113,81 @@ _Aquí va el diagrama entidad-relación_
 ### Descripción de entidades
 
 #### User
-**Descripción**:
+**Descripción**:  
 Representa a los usuarios que pueden solicitar servicios en la plataforma.
 
 **Atributos**:
-- `Long id_user` (Primary Key)
+- `Long id` (Primary Key)
 - `LocalDateTime registration_date`
 - `String email`
 - `String password`
 - `String phoneNumber`
 - `String address`
+- `Rol rol` (Enum)
 
-**Relaciones**:
-Relación one-to-one con **Location**.
+**Relaciones**:  
+Relación one-to-one con **Location**.  
 Relación de herencia con las entidades **Provider** y **Client**.
 
+**DTOs:**
+
+UserLoginDto:
+- `String email`
+- `String password`
+
+
 #### Provider
-**Descripción**:
-Subclase de **User**
+**Descripción**:  
+Subclase de **User**  
 Representa a los proveedores de los diferentes servicios dentro de la aplicación.
 
 **Atributos**:
-- `Boolean active`
+- `Boolean estate`
 - `Integer rating`
 - `Double comission`
 - `String ruc`
 
-**Relaciones**:
-Relación many-to-many con **ServiceEntity**.
+**Relaciones**:  
+Relación many-to-many con **ServiceEntity**.  
 Relación de herencia con las entidades **Freelancer** y **Enterprise**.
 
+
+
+#### Client
+**Descripción**:  
+Subclase de **User**  
+Define a los clientes que solicitan servicios en la plataforma.
+
+**Atributos**:
+- `Long dni`
+- `String first_name`
+- `String last_name`
+- `Boolean showAds`
+
+
+**DTOs:**
+
+ClientDtoViewPerfilResponse:
+- `String first_name`
+- `String last_name`
+- `String phoneNumber`
+- `String address`
+- `String email`
+
+ClientDtoRegister:
+- `String first_name`
+- `String last_name`
+- `String phoneNumber`
+- `String address`
+- `String email`
+- `String password`
+- `Long DNI` (Opcional)
+
+
+
 #### Freelancer
-**Descripción**:
-Subclase de **Provider**
+**Descripción**:  
+Subclase de **Provider**  
 Representa a un proveedor autónomo.
 
 **Atributos**:
@@ -155,27 +198,84 @@ Representa a un proveedor autónomo.
 - `String grade`
 - `Long dni`
 
+**DTOs:**
+
+FreelancerDtoRegister:
+- `String first_name`
+- `String last_name`
+- `Long phoneNumber`
+- `String address`
+- `String password`
+- `String email`
+- `Long dni`
+
+FreelancerDtoUpdateProfile:
+- `String first_name`
+- `String last_name`
+- `Integer age`
+- `Long phoneNumber`
+- `String address`
+- `Long dni`
+- `String email`
+- `LevelEducation levelEducation`
+- `String experience`
+- `String speciality`
+
+FreelancerDtoViewPerfilResponse:
+- `String first_name`
+- `String last_name`
+- `String phoneNumber`
+- `String address`
+- `String email`
+- `Long dni`
+- `LevelEducation levelEducation`
+- `String experience`
+- `String speciality`
+
+
 #### Enterprise
-**Descripción**:
-Subclase de **Provider**
+**Descripción**:  
+Subclase de **Provider**  
 Representa a una empresa que ofrece servicios.
 
 **Atributos**:
 - `String name`
-- `Category category` (ENUM)
+- `String description`
+- `Long ruc`
 - `Size size` (ENUM)
+- `BusinessSector businessSector` (ENUM)
+- `String address`
 
-#### Client
-**Descripción**:
-Subclase de **User**
-Define a los clientes que solicitan servicios en la plataforma.
+**DTOs:**
 
-**Atributos**:
-- `Long dni`
-- `Boolean showAds`
+EnterpriseDtoRegister:
+- `Long ruc`
+- `String password`
+- `String email`
+- `String address`
+- `Size size` (ENUM)
+- `BusinessSector businessSector` (ENUM)
+
+EnterpriseDtoUpdateProfile:
+- `Long ruc`
+- `String name`
+- `String description`
+- `String email`
+- `String address`
+- `Size size` (ENUM)
+- `BusinessSector businessSector` (ENUM)
+
+EnterpriseDtoViewPerfilResponse:
+- `Long ruc`
+- `String name`
+- `String description`
+- `String email`
+- `String address`
+- `Size size` (ENUM)
+- `BusinessSector businessSector` (ENUM)
 
 #### Location
-**Descripción**:
+**Descripción**:  
 Define la ubicación del usuario.
 
 **Atributos**:
@@ -183,8 +283,13 @@ Define la ubicación del usuario.
 - `String description`
 - `String coordinates`
 
+**DTOs:**
+
+LocationResponseDto:
+- `String coordinates`
+
 #### Arrangement
-**Descripción**:
+**Descripción**:  
 Registra el acuerdo entre un proveedor y un cliente para un servicio.
 
 **Atributos**:
@@ -192,10 +297,18 @@ Registra el acuerdo entre un proveedor y un cliente para un servicio.
 - `LocalDateTime start_date`
 - `LocalDateTime end_date`
 - `String location`
+- `Double agreed_amount`
 - `Long id_payment`
 
+**DTOs:**
+LocationResponseDto:
+- `LocalDateTime start_date`
+- `LocalDateTime end_date`
+- `String location`
+- `Double agreed_amount`
+
 #### Payment
-**Descripción**:
+**Descripción**:  
 Almacena la información del pago realizado por un servicio.
 
 **Atributos**:
@@ -205,7 +318,7 @@ Almacena la información del pago realizado por un servicio.
 - `LocalDateTime date`
 
 #### ServiceEntity
-**Descripción**:
+**Descripción**:  
 Define los servicios ofrecidos por los providers dentro de la plataforma.
 
 **Atributos**:
@@ -217,15 +330,27 @@ Define los servicios ofrecidos por los providers dentro de la plataforma.
 - `String tag`
 
 #### Review
-**Descripción**:
+**Descripción**:  
 Registra las calificaciones y comentarios de los usuarios sobre los servicios recibidos.
 
 **Atributos**:
 - `Long id_review` (Primary Key)
 - `Integer rating`
-- `LocalDateTime date`
+- `Date date`
 - `String comment`
 - `Boolean edited`
+
+**Relaciones**:  
+Relación many-to-one con **ServiceEntity**.  
+Relación de herencia con las entidades **Freelancer** y **Enterprise**.
+
+**DTOs:**
+
+ReviewRequestDto:
+- `Integer rating`
+- `String comment`
+- `Long serviceId`
+- `Long userId`
 
 ## Testing y Manejo de Errores
 
@@ -248,3 +373,266 @@ Registra las calificaciones y comentarios de los usuarios sobre los servicios re
 ## Conclusiones
 
 ## Apéndices
+
+
+# Endpoints para ATuServicio
+
+
+
+## Endpoints para User
+
+## 1. Registro de Usuario
+- **POST** /user/register
+    - **Descripción**: Selecciona si eres Client o Provider.
+    - **Cuerpo**:
+      ```json
+      {
+        "type": "ENUM"  
+      }
+      ```
+
+
+# Endpoints para Client
+
+## 1. Registro de Clientes
+- **POST** /client/register
+    - **Descripción**: Permite a un nuevo usuario registrarse en la plataforma.
+    - **Cuerpo**:
+      ```json
+      {
+        "email": "string",
+        "password": "string",
+        "phoneNumber": "string",
+        "address": "string"
+      }
+      ```
+
+## 2. Iniciar Sesión de Clientes
+- **POST** /client/login
+    - **Descripción**: Permite a un usuario iniciar sesión en la plataforma.
+    - **Cuerpo**:
+      ```json
+      {
+        "email": "string",
+        "password": "string"
+      }
+      ```
+
+## 3. Obtener Información de un Cliente
+- **GET** /client/{id}
+    - **Descripción**: Recupera la información del usuario especificado.
+    - **Cuerpo**:
+      ```json
+      {
+        "firsname": "string",
+        "lastname": "string",
+        "dni": "string",
+        "phonenumber": "string",
+        "email": "string"
+      }
+      ```
+
+## 6. Obtener Historial de Servicios
+- **GET** /client/{id}/arrangements
+    - **Descripción**: Recupera el historial de servicios solicitados por un cliente.
+
+---
+
+# Endpoints para Proveedores
+
+## 1. Registro de Proveedor
+- **POST** /provider/register
+    - **Descripción**: Permite a un proveedor registrarse como empresa o freelancer.
+    - **Cuerpo**:
+      ```json
+      {
+        "category": "enum",
+      }
+      ```
+
+
+## 3. Obtener Proveedores Cercanos
+- **GET** /provider/nearby?lat={latitude}&lng={longitude}
+    - **Descripción**: Obtiene una lista de proveedores cercanos a una ubicación dada.
+
+---
+
+
+# Endpoints para Freelancer
+## 1. Registro de un freelancer
+
+- **POST** /provider/freelancer/register
+- **Descripción**: Permite a un proveedor registrarse freelancer.
+    - **Cuerpo**:
+      ```json
+      {
+        "firstName": "string",
+        "lastName": "string",
+        "age": "string",
+        "speciality": "string",
+        "experience": "string",
+        "grade": "string",
+      }
+
+
+# Endpoints para Servicios
+
+## 1. Solicitar Servicio
+- **POST** /serviceEntity/solicitate
+    - **Descripción**: Permite a un cliente solicitar un servicio.
+    - **Cuerpo**:
+      ```json
+      {
+        "providerId": "long",
+        "serviceId": "long",
+        "location": "string",
+        "startDate": "datetime",
+        "endDate": "datetime"
+      }
+      ```
+
+## 2. Publicar un Servicio
+- **POST** /serviceEntity/publish
+    - **Descripción**: Permite a un proveedor publicar un servicio.
+    - **Cuerpo**:
+      ```json
+      {
+        "descripcion": "string",
+        "nombre": "string",
+        "tags": "string",
+        "precioSugerido": "decimal",
+        "location": "string"
+      }
+      ```
+
+## 3. Obtener un Servicio
+- **GET** /serviceEntity/{id}
+    - **Descripción**: Obtiene los detalles de un servicio.
+    - **Respuesta**:
+      ```json
+      {
+        "descripcion": "string",
+        "nombre": "string",
+        "tags": "string",
+        "location": "string",
+        "rating": "integer",
+        "provider": "string"
+      }
+      ```
+
+## 4. Borrar un Servicio
+- **DELETE** /serviceEntity/{id}
+    - **Cuerpo**:
+      ```json
+      {
+        "id": "1"
+      }
+      ```
+
+## 5. Actualizar un Servicio
+- **PATCH** /serviceEntity/{id}
+    - **Cuerpo**:
+      ```json
+      {
+        "update1": "value",
+        "update2": "value"
+      }
+      ```
+
+# Endpoints para Calificaciones
+
+## 1. Agregar Reseña
+
+- **POST** /serviceEntity/{id}/review
+    - **Descripción**: Permite a un usuario dejar una reseña sobre un servicio.
+    - **Cuerpo**:
+      ```json
+      {
+        "rating": "integer",
+        "comment": "string",
+        "userId": "long"
+      }
+      ```
+
+## 2. Obtener Reseñas por Servicio
+- **GET** /serviceEntity/{id}/review
+    - **Descripción**: Recupera todas las reseñas asociadas a un servicio específico.
+    - **Respuesta** (Lista):
+      ```json
+      [
+        {
+          "edited": "bool",
+          "rating": "integer",
+          "comment": "string",
+          "userId": "long",
+          "date": "LocalDateTime"
+        }
+      ]
+      ```
+
+## 3. Editar Reseña por Id
+- **PATCH** /serviceEntity/{Id}/reviews/{id}
+    - **Descripción**: Permite editar una reseña específica.
+    - **Cuerpo**:
+      ```json
+      {
+        "rating": "integer",
+        "comment": "string"
+      }
+      ```
+
+## 4. Eliminar Reseña por Id
+- **DELETE** /serviceEntity/{Id}/reviews/{id}
+    - **Descripción**: Permite eliminar una reseña específica.
+      ```json
+      {
+        "reviewId": "long"
+      }
+      ```
+
+
+---
+
+# Endpoints para Pagos
+
+## 1. Realizar Pago dentro de la aplicación
+- **POST** /payment
+    - **Descripción**: Permite a un cliente realizar un pago por un servicio.
+    - **Cuerpo**:
+      ```json
+      {
+        "amount": "double",
+        "method": "string",
+        "date": "datetime",
+        "arrangementId": "long"
+      }
+      ```
+
+## 2. Obtener Detalles de Pago
+- **GET** /payment/{id}
+    - **Descripción**: Recupera la información del pago especificado.
+
+---
+
+
+# Endopoints de Arrangement
+## 1. Postear un arrangement (hacer un contrato con una empresa)
+- **POST**
+  DESCRIPCION: solicitar un contrato desde cliente
+    - client_id
+    - serviceEntity_id
+
+## 2. DELETE ARRANGEMENTE
+- **DELETE**
+  - 
+
+# Endpoints de Geolocalización
+
+## 1. Obtener Ubicación Actual
+- **GET** /location/current
+    - **Descripción**: Permite al usuario obtener su ubicación actual.
+      ```json
+      {
+        "userId": "long"
+      }
+      ```
