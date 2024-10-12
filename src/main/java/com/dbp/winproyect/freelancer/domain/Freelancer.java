@@ -1,22 +1,20 @@
-package com.dbp.winproyect.freelance.domain;
+package com.dbp.winproyect.freelancer.domain;
 
 
 import com.dbp.winproyect.provider.domain.Provider;
 import jakarta.persistence.Entity;
 import lombok.Data;
 
-import java.io.Serializable;
-
 
 @Data
 @Entity
-public class Freelance extends Provider {
+public class Freelancer extends Provider {
 
     private String firstName;
     private String lastName;
     private Integer age;
     private Integer dni;
-    private Integer experience;
+    private String experience;
     private LevelEducation levelEducation;
 
 

@@ -1,4 +1,5 @@
-package com.dbp.winproyect.appuser.dto;
+package com.dbp.winproyect.auth.dto;
+
 
 import lombok.Data;
 
@@ -6,4 +7,5 @@ import lombok.Data;
 public class UserLoginDto {
     private String email;
     private String password;
+
 }

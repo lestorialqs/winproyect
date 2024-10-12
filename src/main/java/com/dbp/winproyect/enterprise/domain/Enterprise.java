@@ -8,9 +8,10 @@ import lombok.Data;
 @Data
 @Entity
 public class Enterprise extends Provider {
+    private Long ruc;
     private String name;
     private String description;
     private BusinessSector businessSector;
-
-
+    private Size size;
+    private String address;
 }
