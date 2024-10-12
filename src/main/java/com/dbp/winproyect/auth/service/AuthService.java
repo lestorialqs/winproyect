@@ -9,7 +9,7 @@ import com.dbp.winproyect.auth.dto.EnterpriseDtoRegister;
 import com.dbp.winproyect.auth.dto.FreelancerDtoRegister;
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.enterprise.domain.Enterprise;
-import com.dbp.winproyect.freelancer.domain.Freelance;
+import com.dbp.winproyect.freelancer.domain.Freelancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,7 @@ public class AuthService {
         }
 
         // Crear un nuevo Freelancer a partir del DTO
-        Freelance freelancer = new Freelance();
+        Freelancer freelancer = new Freelancer();
         freelancer.setEmail(freelancerDtoRegister.getEmail());
         freelancer.setPassword(passwordEncoder.encode(freelancerDtoRegister.getPassword()));
         freelancer.setFirstName(freelancerDtoRegister.getFirstName());
