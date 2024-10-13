@@ -14,18 +14,4 @@ import java.util.Map;
 public class FreelancerController {
     private final FreelancerService freelancerService;
 
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<FreelancerDtoViewPerfilResponse> verPerfilFreelancer(@PathVariable Long id) {
-        FreelancerDtoViewPerfilResponse freelancerDto = freelancerService.obtenerPerfilFreelancer(id);
-        return ResponseEntity.ok(freelancerDto);
-    }
-
-
-    @PatchMapping("profile/{id}")
-    public ResponseEntity<FreelancerDtoViewPerfilResponse> updateFreelancerProfile(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> updates) {
-        FreelancerDtoViewPerfilResponse updatedFreelancer = freelancerService.updateFreelancer(id, updates);
-        return ResponseEntity.ok(updatedFreelancer);
-    }
 }

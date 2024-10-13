@@ -51,11 +51,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/login", "/auth/register/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/service/{idService}/arrangement").hasRole("CLIENT");
+
                     auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE");
                     auth.requestMatchers(HttpMethod.GET, "/profile").authenticated();
                     auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated();
+                    auth.requestMatchers("/ws/**").authenticated(); // WebSockets requieren autenticación
+                    auth.requestMatchers("/topic/messages").authenticated(); // Mensajes también requieren autenticación
                     auth.anyRequest().authenticated();
                 })
+                .formLogin(AbstractHttpConfigurer::disable) // Desactivar formLogin porque estás usando JWT
+                .logout(logout -> logout.permitAll()) // Permitir que el logout esté disponible
                 .build();
     }
 
