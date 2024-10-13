@@ -1,4 +1,4 @@
-package com.dbp.winproyect.provider.infrastructure;
+package com.dbp.winproyect.repostitorytests;
 
 import com.dbp.winproyect.AbstractContainerBaseTest;
 import org.assertj.core.api.Assertions;
