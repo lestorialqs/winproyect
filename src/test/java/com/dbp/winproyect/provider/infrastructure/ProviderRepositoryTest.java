@@ -1,30 +1,85 @@
 package com.dbp.winproyect.provider.infrastructure;
 
+import com.dbp.winproyect.AbstractContainerBaseTest;
+import com.dbp.winproyect.provider.domain.Provider;
+import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.transaction.annotation.Transactional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.dbp.winproyect.provider.domain.Provider;
-import org.junit.jupiter.api.Test;
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional // Para realizar rollback después de cada test
+public class ProviderRepositoryTest extends AbstractContainerBaseTest {
 
-class ProviderTest {
+    @Autowired
+    private ProviderRepository providerRepository;
 
     @Test
-    void testProviderCreation() {
+    public void testProviderCreation() {
         Provider provider = new Provider();
         provider.setRuc(987654321L);
         provider.setEstate(true);
         provider.setRating(4.5f);
         provider.setComission(0.2);
-
-        // Atributos heredados de AppUser
         provider.setEmail("provider@example.com");
         provider.setPhoneNumber("1122334455");
 
-        assertEquals(987654321L, provider.getRuc());
-        assertTrue(provider.getEstate());
-        assertEquals(4.5f, provider.getRating());
-        assertEquals(0.2, provider.getComission());
-        assertEquals("provider@example.com", provider.getEmail());
-        assertEquals("1122334455", provider.getPhoneNumber());
-    }
-}
+        Provider savedProvider = providerRepository.save(provider);
 
+        assertNotNull(savedProvider.getId()); // Verifica que el ID fue generado
+        assertEquals(987654321L, savedProvider.getRuc());
+        assertTrue(savedProvider.getEstate());
+        assertEquals(4.5f, savedProvider.getRating());
+        assertEquals(0.2, savedProvider.getComission());
+        assertEquals("provider@example.com", savedProvider.getEmail());
+        assertEquals("1122334455", savedProvider.getPhoneNumber());
+    }
+    @Test
+    public void testFindById() {
+        Provider provider = new Provider();
+        provider.setRuc(123456789L);
+        provider.setEstate(true);
+        provider.setRating(4.0f);
+        provider.setComission(0.15);
+        provider.setEmail("provider2@example.com");
+        provider.setPhoneNumber("9988776655");
+
+        // Guarda el proveedor
+        Provider savedProvider = providerRepository.save(provider);
+
+        // Busca el proveedor por su ID
+        Provider foundProvider = providerRepository.findById(savedProvider.getId()).orElse(null);
+
+        // Verifica que el proveedor fue encontrado
+        assertNotNull(foundProvider);
+        assertEquals(savedProvider.getId(), foundProvider.getId());
+    }
+    @Test
+    public void testDeleteById() {
+        Provider provider = new Provider();
+        provider.setRuc(111222333L);
+        provider.setEstate(true);
+        provider.setRating(4.2f);
+        provider.setComission(0.1);
+        provider.setEmail("provider3@example.com");
+        provider.setPhoneNumber("5566778899");
+
+        // Guarda el proveedor
+        Provider savedProvider = providerRepository.save(provider);
+
+        // Verifica que el proveedor fue guardado
+        assertNotNull(savedProvider.getId());
+
+        // Elimina el proveedor
+        providerRepository.deleteById(savedProvider.getId());
+
+        // Verifica que el proveedor fue eliminado
+        Provider deletedProvider = providerRepository.findById(savedProvider.getId()).orElse(null);
+        assertNull(deletedProvider);
+    }
+
+
+}

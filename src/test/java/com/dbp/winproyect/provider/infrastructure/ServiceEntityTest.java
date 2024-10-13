@@ -1,5 +1,6 @@
 package com.dbp.winproyect.provider.infrastructure;
 
+import com.dbp.winproyect.AbstractContainerBaseTest;
 import org.assertj.core.api.Assertions;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -11,14 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ServiceEntityTest {
-
-    private Provider provider;
-    private Provider provider2;
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public class ServiceEntityTest extends AbstractContainerBaseTest {
 
     @Mock
     private ServiceEntityRepository serviceEntityRepository;
@@ -30,8 +30,8 @@ public class ServiceEntityTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);  // Inicializa los mocks
 
-        provider = new Provider();  // Inicializa el primer proveedor
-        provider2 = new Provider(); // Inicializa el segundo proveedor
+        Provider provider = new Provider();  // Inicializa el primer proveedor
+        Provider provider2 = new Provider(); // Inicializa el segundo proveedor
 
         // Creación de la primera entidad de servicio
         serviceEntity = new ServiceEntity();
