@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class ArrangementRequestDto {
-    private Long price;
+    private Float price;
 
 
 }

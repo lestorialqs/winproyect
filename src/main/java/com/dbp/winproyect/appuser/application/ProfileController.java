@@ -64,18 +64,18 @@ public class ProfileController {
         }
     }
 
-//    @GetMapping("/profile/arrangement")
-//    public ResponseEntity<List<Arrangement>> getUserArrangements(Principal principal) {
-//
-//        List<Arrangement> arrangements = arrangementService.;
-//        return
-//    }
-//
-//    @GetMapping("/profile/arrangement/{id}")
-//    public ResponseEntity<Arrangement> getUserArrangement(@PathVariable Long id, Principal principal) {
-//        // Llamar al servicio pasando el ID y el Principal
-//        Arrangement arrangement = arrangementService.getArrangementByIdAndUser(id, principal.getName());
-//        return ResponseEntity.ok(arrangement);
-//    }
+    @GetMapping("/profile/arrangement")
+    public ResponseEntity<List<Arrangement>> getUserArrangements(Principal principal) {
+
+        List<Arrangement> arrangements = arrangementService.findByClientId(principal);
+        return ResponseEntity.ok(arrangements);
+    }
+
+    @GetMapping("/profile/arrangement/{id}")
+    public ResponseEntity<Arrangement> getUserArrangement(@PathVariable Long id, Principal principal) {
+        // Llamar al servicio pasando el ID y el Principal
+        Arrangement arrangement = arrangementService.getArrangementByIdAndUser(id, principal);
+        return ResponseEntity.ok(arrangement);
+    }
 
 }
