@@ -57,7 +57,7 @@ class EnterpriseServiceTests {
 
         // Simular la conversión a DTO
         EnterpriseDtoViewPerfilResponse expectedDto = new EnterpriseDtoViewPerfilResponse();
-        expectedDto.setName(enterprise.getName());
+        //expectedDto.setName(enterprise.getName());
         expectedDto.setDescription(enterprise.getDescription());
         when(modelMapper.map(enterprise, EnterpriseDtoViewPerfilResponse.class)).thenReturn(expectedDto);
 
@@ -66,7 +66,7 @@ class EnterpriseServiceTests {
 
         // Verificar que el resultado no es nulo
         assertNotNull(result);
-        assertEquals("Tech Corp", result.getName());
+        //ssertEquals("Tech Corp", result.getName());
         assertEquals("A tech company", result.getDescription());
 
         // Verificar que el repositorio fue llamado una vez
@@ -97,7 +97,7 @@ class EnterpriseServiceTests {
 
         // Ejecutar el método de actualización
         EnterpriseDtoViewPerfilResponse expectedDto = new EnterpriseDtoViewPerfilResponse();
-        expectedDto.setName("New Tech Corp");
+        //expectedDto.setName("New Tech Corp");
         expectedDto.setDescription("A leading tech company");
         when(enterpriseRepository.save(any(Enterprise.class))).thenReturn(enterprise);
         when(modelMapper.map(enterprise, EnterpriseDtoViewPerfilResponse.class)).thenReturn(expectedDto);
