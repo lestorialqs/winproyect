@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class EnterpriseDtoViewPerfilResponse {
     private Long ruc;  // Registro Único de Contribuyente
-    private String name;
     private String description;
     private String email;
     private String address;
