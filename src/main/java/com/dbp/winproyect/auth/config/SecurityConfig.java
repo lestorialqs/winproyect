@@ -2,9 +2,12 @@ package com.dbp.winproyect.auth.config;
 
 import com.dbp.winproyect.auth.filter.JwtAuthenticationFilter;
 import com.dbp.winproyect.auth.service.AppUserDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -14,6 +17,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -33,20 +43,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF, ya que estamos usando JWT
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/login", "/auth/register/**").permitAll()  // Permitir acceso sin autenticación a login y registro
-                        .anyRequest().authenticated()  // Proteger el resto de los endpoints
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Sin estado, usando JWT
-                );
-
-        // Añadir el filtro JWT antes del filtro de autenticación predeterminado
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/auth/login", "/auth/register/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE");
+                    auth.requestMatchers(HttpMethod.GET, "/profile").authenticated();
+                    auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated();
+                    auth.anyRequest().authenticated();
+                })
+                .build();
     }
 
     @Bean
@@ -57,7 +67,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(appUserDetailsService);
+        provider.setUserDetailsService(appUserDetailsService); // Usar tu UserDetailsService
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

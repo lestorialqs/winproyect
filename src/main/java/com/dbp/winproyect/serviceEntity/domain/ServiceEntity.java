@@ -18,6 +18,7 @@ public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
     private String description;
     private String address;
     private Double suggestedPrice;
@@ -25,11 +26,6 @@ public class ServiceEntity {
     private Float avg_rating;
 
     @ManyToMany
-    @JoinTable(
-            name = "service_tags",
-            joinColumns = @JoinColumn(name = "service_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
     private Set<Tag> tags = new HashSet<>();
 
 

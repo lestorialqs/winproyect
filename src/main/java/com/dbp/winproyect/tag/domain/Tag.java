@@ -18,7 +18,7 @@ public class Tag {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String name;
+    private ServiceTag name;
 
     @ManyToMany(mappedBy = "tags")
     private Set<ServiceEntity> services = new HashSet<>();
