@@ -20,5 +20,4 @@ public class Message {
 
     @ManyToOne
     private AppUser sender;
-    private LocalDateTime sentAt;
 }

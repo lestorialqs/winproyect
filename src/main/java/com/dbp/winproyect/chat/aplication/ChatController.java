@@ -1,5 +1,6 @@
 package com.dbp.winproyect.chat.aplication;
 
+import com.dbp.winproyect.chat.domain.Chat;
 import com.dbp.winproyect.chat.domain.Message;
 import com.dbp.winproyect.chat.dto.MessageDto;
 import com.dbp.winproyect.chat.domain.ChatService;
@@ -24,6 +25,13 @@ public class ChatController {
         Message message = chatService.sendMessage(messageDto.getChatRoomId(), messageDto.getSenderId(), messageDto.getContent());
         return ResponseEntity.ok(message);
     }
+
+    @PostMapping("/crearSala")
+    public ResponseEntity<Chat> crearSala(@RequestBody Chat chatRoom) {
+        Chat nuevaSala = chatService.crearSala(chatRoom);
+        return ResponseEntity.ok(nuevaSala);
+    }
+
 
     @GetMapping("/room/{chatRoomId}")
     public ResponseEntity<List<Message>> getChatRoomMessages(@PathVariable Long chatRoomId) {

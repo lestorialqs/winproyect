@@ -10,7 +10,6 @@ import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +28,8 @@ public class ChatService {
         this.pusher = pusher;
     }
 
+
+
     public Message sendMessage(Long chatRoomId, Long senderId, String content) {
         // Obtén la sala de chat
         Chat chatRoom = chatRoomRepository.findById(chatRoomId)
@@ -43,7 +44,6 @@ public class ChatService {
         message.setContent(content);
         message.setChatRoom(chatRoom);
         message.setSender(sender);
-        message.setSentAt(LocalDateTime.now());
 
         messageRepository.save(message);
 
@@ -56,6 +56,16 @@ public class ChatService {
         pusher.trigger("chat-channel", "new-message", messageDto);
 
         return message;
+    }
+
+    public Chat crearSala(Chat chatRoom) {
+        // Validar que el cliente y el proveedor no sean nulos
+        if (chatRoom.getClient() == null || chatRoom.getProvider() == null) {
+            throw new IllegalArgumentException("El cliente y el proveedor deben ser especificados.");
+        }
+
+        // Guardar la nueva sala en la base de datos
+        return chatRoomRepository.save(chatRoom); // Cambia ChatRoomRepository por chatRoomRepository
     }
 
     public List<Message> getChatRoomMessages(Long chatRoomId) {

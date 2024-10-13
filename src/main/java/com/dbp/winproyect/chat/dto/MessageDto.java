@@ -8,6 +8,5 @@ import java.time.LocalDateTime;
 public class MessageDto {
     private Long chatRoomId;  // ID de la sala de chat
     private Long senderId;    // ID del usuario que envía el mensaje (Cliente o Enterprise)
-    private String content;   // Contenido del mensaje
-    private LocalDateTime sentAt;  // Hora en la que fue enviado el mensaje
+    private String content;   // Contenido del mensaje// Hora en la que fue enviado el mensaje
 }

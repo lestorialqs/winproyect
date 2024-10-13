@@ -36,7 +36,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF, ya que estamos usando JWT
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/login", "/auth/register/**").permitAll()  // Permitir acceso sin autenticación a login y registro
+                        .requestMatchers("/auth/login", "/auth/register/**").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
+                        // Permitir acceso sin autenticación a login y registro
                         .anyRequest().authenticated()  // Proteger el resto de los endpoints
                 )
                 .sessionManagement(session -> session
