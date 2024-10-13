@@ -122,7 +122,7 @@ public class ReviewService {
         // Falta revisar que el cliente editando la review es el creador de la review
 
         // Verificar si existen el Servicio y la Review correspondiente
-        if (!serviceEntityRepository.existsById(serviceId))
+        /*if (!serviceEntityRepository.existsById(serviceId))
             throw new ResourceNotFoundException("Service not found");
 
         // Verificar si existe el Cliente que hizo la Review.
@@ -133,7 +133,21 @@ public class ReviewService {
         if (!reviewRepository.existsById(reviewId))
             throw new ResourceNotFoundException("Review not found");
 
-        reviewRepository.deleteById(reviewId);
+        reviewRepository.deleteById(reviewId);*/
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+            ServiceEntity serviceEntity = serviceEntityRepository.findById(serviceId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Service not found"));
+
+            // Asegúrate de que la review esté asociada con el servicio correcto
+            if (!review.getServiceEntity().getId().equals(serviceEntity.getId())) {
+                throw new IllegalStateException("Review is not associated with the provided service");
+            }
+
+            reviewRepository.delete(review);
+        }
+
     }
 
-}
+
