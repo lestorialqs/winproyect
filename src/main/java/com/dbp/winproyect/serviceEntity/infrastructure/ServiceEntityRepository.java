@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -17,4 +18,5 @@ import java.util.Set;
 public interface ServiceEntityRepository extends JpaRepository<ServiceEntity, Long> {
 
     List<ServiceEntity> findAllByTags_Name(ServiceTag tagName);
+    Optional<ServiceEntity> findByName(String name);
 }
