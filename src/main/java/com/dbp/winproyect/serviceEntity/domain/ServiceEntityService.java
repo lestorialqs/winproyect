@@ -1,13 +1,11 @@
 package com.dbp.winproyect.serviceEntity.domain;
 
-import com.dbp.winproyect.appuser.domain.Role;
 import com.dbp.winproyect.enterprise.domain.Enterprise;
 import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
 import com.dbp.winproyect.freelancer.domain.Freelancer;
 import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
-import com.dbp.winproyect.provider.domain.Provider;
 import com.dbp.winproyect.provider.domain.ProviderService;
-import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
+import com.dbp.winproyect.repostitorytests.ProviderRepository;
 import com.dbp.winproyect.review.domain.ReviewService;
 import com.dbp.winproyect.serviceEntity.dto.ServiceDtoRequest;
 import com.dbp.winproyect.serviceEntity.dto.ServiceDtoResponse;

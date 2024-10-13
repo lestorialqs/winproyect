@@ -1,5 +1,4 @@
-package com.dbp.winproyect.provider.infrastructure;
-import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
+package com.dbp.winproyect.repostitorytests;
 import com.dbp.winproyect.AbstractContainerBaseTest;
 import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.provider.domain.Provider;

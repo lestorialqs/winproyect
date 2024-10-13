@@ -1,4 +1,4 @@
-package com.dbp.winproyect.provider.infrastructure;
+package com.dbp.winproyect.repostitorytests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
@@ -9,11 +9,9 @@ import com.dbp.winproyect.AbstractContainerBaseTest;
 import com.dbp.winproyect.appuser.domain.AppUser;
 import com.dbp.winproyect.appuser.infrastructure.BaseAppUserRepository;
 import com.dbp.winproyect.location.domain.Location;
-import com.dbp.winproyect.provider.domain.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;

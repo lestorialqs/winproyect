@@ -1,8 +1,7 @@
-package com.dbp.winproyect.provider.infrastructure;
+package com.dbp.winproyect.repostitorytests;
 
 import com.dbp.winproyect.AbstractContainerBaseTest;
 import com.dbp.winproyect.provider.domain.Provider;
-import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

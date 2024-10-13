@@ -1,4 +1,4 @@
-package com.dbp.winproyect.provider.infrastructure;
+package com.dbp.winproyect.repostitorytests;
 
 import static com.dbp.winproyect.enterprise.domain.Size.MEDIANA;
 import static org.junit.jupiter.api.Assertions.*;
