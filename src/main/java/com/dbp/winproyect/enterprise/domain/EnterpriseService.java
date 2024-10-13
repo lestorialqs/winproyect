@@ -18,6 +18,11 @@ public class EnterpriseService {
     private final EnterpriseRepository enterpriseRepository;
     private final ModelMapper modelMapper;
 
+
+    public boolean existsById(Long freelancerId) {
+        return enterpriseRepository.existsById(freelancerId);
+    }
+
     // Método para obtener el perfil de una empresa
     public EnterpriseDtoViewPerfilResponse obtenerPerfilEmpresa(Long enterpriseId) {
         Enterprise enterprise = enterpriseRepository.findById(enterpriseId)

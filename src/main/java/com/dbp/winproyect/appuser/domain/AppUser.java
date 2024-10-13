@@ -29,9 +29,4 @@ public class AppUser {
     @JoinColumn(name = "location_id")
     private Location location;
 
-
-    // aca hay mas atributos ? :c si pero pa q
-
-
-
 }

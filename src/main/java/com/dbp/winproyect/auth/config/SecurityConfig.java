@@ -13,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,15 +50,20 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/login", "/auth/register/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE");
-                    auth.requestMatchers(HttpMethod.GET, "/profile").authenticated();
-                    auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated();
-                    auth.anyRequest().authenticated();
+                    auth.requestMatchers("/auth/login", "/auth/register/**").permitAll(); // Permitir acceso sin autenticación
+                    auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll(); // Permitir GET para usuarios no autenticados
+                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE"); // Permitir POST solo para ciertos roles
+                    auth.requestMatchers(HttpMethod.GET, "/profile").authenticated(); // Autenticación necesaria para el perfil
+                    auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated(); // Autenticación necesaria para actualizar perfil
+                    auth.requestMatchers("/ws/**").authenticated(); // WebSockets requieren autenticación
+                    auth.requestMatchers("/topic/messages").authenticated(); // Mensajes también requieren autenticación
+                    auth.anyRequest().authenticated(); // Cualquier otra solicitud necesita autenticación
                 })
+                .formLogin(AbstractHttpConfigurer::disable) // Desactivar formLogin porque estás usando JWT
+                .logout(logout -> logout.permitAll()) // Permitir que el logout esté disponible
                 .build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
