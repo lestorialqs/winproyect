@@ -1,5 +1,6 @@
 package com.dbp.winproyect.review.infrastructure;
 
+import com.dbp.winproyect.client.domain.Client;
 import com.dbp.winproyect.review.domain.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,5 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByServiceEntityId(Long serviceId, Pageable pageable);
+    Page<Review> findByServiceEntityId(Long serviceId, Pageable pageable);
+
+    List<Review> findAllByClient(Client client);
 }

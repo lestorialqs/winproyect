@@ -2,7 +2,7 @@ package com.dbp.winproyect.appuser.domain;
 
 import com.dbp.winproyect.location.domain.Location;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "app_user")
+
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
 
@@ -27,7 +28,6 @@ public class AppUser {
     @OneToOne
     @JoinColumn(name = "location_id")
     private Location location;
-
 
 
     // aca hay mas atributos ? :c si pero pa q
