@@ -60,7 +60,7 @@ public class ClientService {
         return modelMapper.map(client, ClientDtoViewPerfilResponse.class);
     }
 
-    private ClientDtoViewPerfilResponse convertToDto(Client client) {
+    public ClientDtoViewPerfilResponse convertToDto(Client client) {
         return modelMapper.map(client, ClientDtoViewPerfilResponse.class);
     }
 }
