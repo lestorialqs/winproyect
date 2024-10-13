@@ -18,6 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -36,26 +43,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF, ya que estamos usando JWT
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/login", "/auth/register/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll()  // Cualquier usuario puede obtener servicios
-                        // Endpoints para crear servicios
-                        .requestMatchers(HttpMethod.POST, "/service").hasAnyRole("FREELANCER", "ENTERPRISE")
-                        // Endpoints para perfil propio
-                        .requestMatchers(HttpMethod.GET, "/profile").authenticated()  // Cualquier usuario autenticado puede ver su perfil
-                        .requestMatchers(HttpMethod.PATCH, "/profile").authenticated()  // Cualquier usuario autenticado puede modificar su perfil
-                        .anyRequest().authenticated()  // Proteger todo lo demás
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Sin estado, usando JWT
-                );
-
-        // Añadir el filtro JWT antes del filtro de autenticación predeterminado
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/auth/login", "/auth/register/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE");
+                    auth.requestMatchers(HttpMethod.GET, "/profile").authenticated();
+                    auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated();
+                    auth.anyRequest().authenticated();
+                })
+                .build();
     }
 
     @Bean
@@ -66,7 +67,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(appUserDetailsService);
+        provider.setUserDetailsService(appUserDetailsService); // Usar tu UserDetailsService
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

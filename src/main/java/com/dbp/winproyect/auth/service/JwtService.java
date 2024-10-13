@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 @Service
 public class JwtService {
-
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     // Clave secreta para firmar los tokens JWT (puedes cambiarla por algo más seguro)
     private static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     // Generar el token JWT usando el UserDetails del usuario
@@ -39,7 +39,8 @@ public class JwtService {
 
         // Crear los claims (cualquier información adicional que quieras agregar al token)
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "ROLE_" + role);  // Añadir el prefijo ROLE_ al rol
+        claims.put("role", role);  // Sin el prefijo ROLE_
+        // Añadir el prefijo ROLE_ al rol
         // Incluimos el rol en los claims
 
 

@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     @Autowired
     private BaseAppUserRepository baseAppUserRepository;
 
