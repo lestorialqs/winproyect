@@ -47,7 +47,7 @@ public class ProfileController {
                     .orElseThrow(() -> new RuntimeException("Enterprise no encontrado"));
             return ResponseEntity.ok(enterprise);
         } else if (role.contains("CLIENT")) {
-            Client client = clientRepository.findByEmail(email)
+            Client client = (Client) clientRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Client no encontrado"));
             return ResponseEntity.ok(client);
         }
@@ -101,7 +101,7 @@ public class ProfileController {
             return ResponseEntity.ok(enterprise);
 
         } else if (role.contains("CLIENT")) {
-            Client client = clientRepository.findByEmail(email)
+            Client client = (Client) clientRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Client no encontrado"));
 
             // Mapear el objeto profileUpdateRequest a ClientUpdateDto

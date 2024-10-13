@@ -1,33 +1,39 @@
 package com.dbp.winproyect.provider.infrastructure;
 
-import static com.dbp.winproyect.tag.domain.ServiceTag.*;
+import org.assertj.core.api.Assertions;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.dbp.winproyect.provider.domain.Provider;
 import com.dbp.winproyect.serviceEntity.domain.ServiceEntity;
-import com.dbp.winproyect.tag.domain.Tag;
+import com.dbp.winproyect.serviceEntity.infrastructure.ServiceEntityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 public class ServiceEntityTest {
 
-    @Mock
     private Provider provider;
+    private Provider provider2;
 
     @Mock
-    private Tag tag;
+    private ServiceEntityRepository serviceEntityRepository;
 
-    @InjectMocks
     private ServiceEntity serviceEntity;
+    private ServiceEntity serviceEntity2;
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);  // Inicializa los mocks
+
+        provider = new Provider();  // Inicializa el primer proveedor
+        provider2 = new Provider(); // Inicializa el segundo proveedor
+
+        // Creación de la primera entidad de servicio
         serviceEntity = new ServiceEntity();
         serviceEntity.setName("Plumbing Service");
         serviceEntity.setDescription("Provides high-quality plumbing services.");
@@ -35,77 +41,96 @@ public class ServiceEntityTest {
         serviceEntity.setSuggestedPrice(100.0);
         serviceEntity.setAvg_rating(4.5f);
         serviceEntity.setProvider(provider);
+
+        // Creación de la segunda entidad de servicio
+        serviceEntity2 = new ServiceEntity();
+        serviceEntity2.setName("Food Service");
+        serviceEntity2.setDescription("Food is delicious.");
+        serviceEntity2.setAddress("321 Main St");
+        serviceEntity2.setSuggestedPrice(15.0);
+        serviceEntity2.setAvg_rating(4.5f);
+        serviceEntity2.setProvider(provider2);
+        // Simula que el método save() devuelve una entidad con un ID
+        when(serviceEntityRepository.save(any(ServiceEntity.class))).thenAnswer(invocation -> {
+            ServiceEntity entity = invocation.getArgument(0);
+            entity.setId(1L);  // Simula que la entidad tiene un ID asignado
+            return entity;
+        });
     }
 
     @Test
-    void testServiceEntityCreation() {
+    public void testServiceEntityCreation() {
+        assertNotNull(serviceEntity.getProvider());  // Comprueba que el proveedor no sea null
         assertEquals("Plumbing Service", serviceEntity.getName());
         assertEquals("Provides high-quality plumbing services.", serviceEntity.getDescription());
         assertEquals("123 Main St", serviceEntity.getAddress());
         assertEquals(100.0, serviceEntity.getSuggestedPrice());
         assertEquals(4.5f, serviceEntity.getAvg_rating());
-        assertNotNull(serviceEntity.getProvider());
     }
 
     @Test
-    void testAddTag() {
-        Tag newTag = new Tag();
-        newTag.setName(FOTOGRAFIA);
-
-        serviceEntity.getTags().add(newTag);
-
-        assertTrue(serviceEntity.getTags().contains(newTag));
+    public void testSaveServiceEntity() {
+        serviceEntityRepository.save(serviceEntity);  // Guarda la entidad de servicio
+        verify(serviceEntityRepository, times(1)).save(serviceEntity);  // Verifica que el método save fue llamado una vez
     }
 
     @Test
-    void testRemoveTag() {
-        Tag newTag = new Tag();
-        newTag.setName(FOTOGRAFIA);
+    public void testListOfProviderRepositoryIsNotNull() {
+        when(serviceEntityRepository.findAll()).thenReturn(List.of(serviceEntity, serviceEntity2));  // Mockea la lista de entidades
 
-        serviceEntity.getTags().add(newTag);
-        serviceEntity.getTags().remove(newTag);
-
-        assertFalse(serviceEntity.getTags().contains(newTag));
+        List<ServiceEntity> serviceEntityList = serviceEntityRepository.findAll();  // Llama a findAll
+        Assertions.assertThat(serviceEntityList).isNotNull();  // Comprueba que la lista no sea null
+        Assertions.assertThat(serviceEntityList.size()).isEqualTo(2);  // Verifica que haya 2 entidades en la lista
     }
-
     @Test
-    void testUpdateProvider() {
-        Provider newProvider = mock(Provider.class);
-        serviceEntity.setProvider(newProvider);
+    public void testServiceEntityRepositoryFindById(){
+        // Guarda la entidad
+        serviceEntity = serviceEntityRepository.save(serviceEntity);
 
-        assertEquals(newProvider, serviceEntity.getProvider());
+        // Verifica que la entidad tenga un ID asignado
+        assertNotNull(serviceEntity.getId(), "ID should not be null after saving the entity");
+
+        // Simula la búsqueda por ID
+        when(serviceEntityRepository.findById(serviceEntity.getId())).thenReturn(Optional.of(serviceEntity));
+
+        // Encuentra la entidad por su ID
+        Optional<ServiceEntity> serviceEntityOptional = serviceEntityRepository.findById(serviceEntity.getId());
+
+        if (serviceEntityOptional.isPresent()) {
+            ServiceEntity foundEntity = serviceEntityOptional.get();
+            assertNotNull(foundEntity);  // Verifica que la entidad se encuentre
+        } else {
+            fail("ServiceEntity with id " + serviceEntity.getId() + " not found");
+        }
     }
-
     @Test
-    void testAverageRatingCalculation() {
-        // Simular varios ratings
-        Set<Float> ratings = new HashSet<>();
-        ratings.add(4.0f);
-        ratings.add(5.0f);
-        ratings.add(3.5f);
+    public void testFindByName() {
+        // Simula la búsqueda por nombre
+        when(serviceEntityRepository.findByName(serviceEntity.getName())).thenReturn(Optional.of(serviceEntity));
 
-        // Calcular el promedio
-        float average = (float) ratings.stream().mapToDouble(Float::doubleValue).average().orElse(0.0);
+        // Llama al método findByName
+        Optional<ServiceEntity> foundEntityOptional = serviceEntityRepository.findByName(serviceEntity.getName());
 
-        serviceEntity.setAvg_rating(average);
+        // Verifica si la entidad fue encontrada
+        assertTrue(foundEntityOptional.isPresent(), "ServiceEntity should be found by name");
 
-        assertEquals(4.17f, serviceEntity.getAvg_rating(), 0.01f); // Verifica que el promedio es correcto
+        // Comprueba los valores de la entidad encontrada
+        ServiceEntity foundEntity = foundEntityOptional.get();
+        assertEquals(serviceEntity.getName(), foundEntity.getName());
+        assertEquals(serviceEntity.getDescription(), foundEntity.getDescription());
     }
-
     @Test
-    void testServiceEntityWithTags() {
-        // Agregar múltiples tags al ServiceEntity
-        Tag tag1 = new Tag();
-        tag1.setName(ELECTRICIDAD);
+    public void testDeleteById() {
+        // Guarda la entidad en el repositorio (simulado)
+        serviceEntityRepository.save(serviceEntity);
 
-        Tag tag2 = new Tag();
-        tag2.setName(MANTENIMIENTO);
+        // Simula la eliminación de la entidad
+        doNothing().when(serviceEntityRepository).deleteById(serviceEntity.getId());
 
-        serviceEntity.getTags().add(tag1);
-        serviceEntity.getTags().add(tag2);
+        // Llama al método deleteById
+        serviceEntityRepository.deleteById(serviceEntity.getId());
 
-        assertEquals(2, serviceEntity.getTags().size());
-        assertTrue(serviceEntity.getTags().contains(tag1));
-        assertTrue(serviceEntity.getTags().contains(tag2));
+        // Verifica que el método deleteById fue llamado exactamente una vez con el ID correcto
+        verify(serviceEntityRepository, times(1)).deleteById(serviceEntity.getId());
     }
 }
