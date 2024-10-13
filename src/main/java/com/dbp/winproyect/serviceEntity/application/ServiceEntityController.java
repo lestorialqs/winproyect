@@ -57,5 +57,9 @@ public class ServiceEntityController {
         List<ServiceDtoResponse> services = serviceEntityService.obtenerServiciosPorTag(tagEnum);
         return ResponseEntity.ok(services);
     }
+    @GetMapping("/hola")
+    public ResponseEntity<String> hola() {
+        return ResponseEntity.ok("Hola");
+    }
 
 }
