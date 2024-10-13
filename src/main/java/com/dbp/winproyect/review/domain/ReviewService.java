@@ -43,7 +43,7 @@ public class ReviewService {
     public Review saveReview(ReviewDtoCreateRequest reviewDtoCreateRequest, Long serviceId) {
 
         // Obteniendo y Comprobando si existe la review a editar:
-        Review newReview = new Review();
+        //Review newReview = new Review();
 
         // Comprobando si existe el Servicio:
 //        Optional<ServiceEntity> service = serviceEntityRepository.
@@ -66,13 +66,37 @@ public class ReviewService {
 
         // Setteando el newReview sin modelMapper (pq puede equivoacrse):
 
-        newReview.setRating(reviewDtoCreateRequest.getRating());
+
+
+        // CAMBIOS LUIS, VOY A PROBAR SI ES QUE SIRVE SINO AQUI GUARDARE EN LOS COMENTARIOS LA VERSION ESTABLE:
+        /*newReview.setRating(reviewDtoCreateRequest.getRating());
         newReview.setComment(reviewDtoCreateRequest.getComment());
         newReview.setDate(ZonedDateTime.now());
         newReview.setServiceEntity(serviceEntityRepository.findById(serviceId).get());
         newReview.setClient(clientRepository.findById(reviewDtoCreateRequest.getUserId()).get());
 
         return reviewRepository.save(newReview);
+         */
+        // Obteniendo y Comprobando si existe la review a editar:
+        Review newReview = new Review();
+
+        // Comprobando si existe el Servicio:
+        ServiceEntity serviceEntity = serviceEntityRepository.findById(serviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Service not found"));
+
+        // Comprobando si existe el Cliente:
+        Client client = clientRepository.findById(reviewDtoCreateRequest.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+
+        // Setteando el newReview:
+        newReview.setRating(reviewDtoCreateRequest.getRating());
+        newReview.setComment(reviewDtoCreateRequest.getComment());
+        newReview.setDate(ZonedDateTime.now());
+        newReview.setServiceEntity(serviceEntity);
+        newReview.setClient(client);
+
+        return reviewRepository.save(newReview);
+
     }
 
     // Para obtener Page (ordenable) de Reviews de un ServiceEntity por id de la ServiceEntity:
