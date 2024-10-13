@@ -6,3 +6,8 @@ public class ArragementResponseDto {
     private String PhoneNumber;
     private String email;
 }
+
+
+
+
+
