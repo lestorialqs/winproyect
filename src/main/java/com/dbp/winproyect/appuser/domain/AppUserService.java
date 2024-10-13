@@ -4,12 +4,16 @@ import com.dbp.winproyect.appuser.update.ClientUpdateDto;
 import com.dbp.winproyect.appuser.update.EnterpriseUpdateDto;
 import com.dbp.winproyect.appuser.update.FreelancerUpdateDto;
 import com.dbp.winproyect.client.domain.Client;
+import com.dbp.winproyect.client.dto.ClientDtoViewPerfilResponse;
 import com.dbp.winproyect.client.infrastructure.ClientRepository;
 import com.dbp.winproyect.enterprise.domain.Enterprise;
+import com.dbp.winproyect.enterprise.dto.EnterpriseDtoViewPerfilResponse;
 import com.dbp.winproyect.enterprise.infrastructure.EnterpriseRepository;
 import com.dbp.winproyect.freelancer.domain.Freelancer;
+import com.dbp.winproyect.freelancer.dto.FreelancerDtoViewPerfilResponse;
 import com.dbp.winproyect.freelancer.infrastructure.FreelancerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,20 +33,31 @@ public class AppUserService {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Object getProfile() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 
         if (role.contains("FREELANCER")) {
-            return freelancerRepository.findByEmail(email)
+            Freelancer freelancer = freelancerRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Freelancer no encontrado"));
+            FreelancerDtoViewPerfilResponse freelancerDtoViewPerfilResponse = new FreelancerDtoViewPerfilResponse();
+            modelMapper.map( freelancer, freelancerDtoViewPerfilResponse );
+            return freelancerDtoViewPerfilResponse;
         } else if (role.contains("ENTERPRISE")) {
-            return enterpriseRepository.findByEmail(email)
+            Enterprise enterprise = enterpriseRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Enterprise no encontrado"));
+            EnterpriseDtoViewPerfilResponse enterpriseDtoViewPerfilResponse = new EnterpriseDtoViewPerfilResponse();
+            modelMapper.map( enterprise, enterpriseDtoViewPerfilResponse );
+            return enterpriseDtoViewPerfilResponse;
         } else if (role.contains("CLIENT")) {
-            return clientRepository.findByEmail(email)
+            Client client = clientRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Client no encontrado"));
+            ClientDtoViewPerfilResponse clientDtoViewPerfilResponse = new ClientDtoViewPerfilResponse();
+            modelMapper.map( client, clientDtoViewPerfilResponse );
+            return clientDtoViewPerfilResponse;
         }
         throw new RuntimeException("Rol no permitido");
     }
