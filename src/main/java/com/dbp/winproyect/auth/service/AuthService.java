@@ -99,7 +99,7 @@ public class AuthService {
         freelancer.setFirstName(freelancerDtoRegister.getFirstName());
         freelancer.setLastName(freelancerDtoRegister.getLastName());
         freelancer.setAddress(freelancerDtoRegister.getAddress());
-        freelancer.setRole(Role.FREELANCE);
+        freelancer.setRole(Role.FREELANCER);
 
         // Guardar el freelancer y generar el token JWT
         baseAppUserRepository.save(freelancer);

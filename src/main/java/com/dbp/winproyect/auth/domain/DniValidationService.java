@@ -24,8 +24,8 @@ public class DniValidationService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(response -> {
-                    // Lógica para determinar si el DNI es válido basado en la respuesta
-                    return !response.contains("error");
+                    System.out.println(response);
+                    return !response.contains("dni no valido");
                 });
     }
 

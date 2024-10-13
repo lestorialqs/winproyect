@@ -27,7 +27,7 @@ public class ProviderService {
             return enterpriseRepository.findById(provider.getId())
                     .map(Enterprise::getName)
                     .orElse("Nombre no disponible"); // Si no se encuentra, maneja el caso
-        } else if (provider.getRole() == Role.FREELANCE) {
+        } else if (provider.getRole() == Role.FREELANCER) {
             return freelancerRepository.findById(provider.getId())
                     .map(freelancer -> freelancer.getFirstName() + " " + freelancer.getLastName())
                     .orElse("Nombre no disponible");
