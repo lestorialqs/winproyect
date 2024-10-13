@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @DataJpaTest
@@ -182,5 +183,88 @@ public class ClientRepositoryTest extends AbstractContainerBaseTest {
         assertEquals("John", foundClient.get().getFirstName());
         assertEquals("Doe", foundClient.get().getLastName());
     }
+    @Test
+    void testUpdateClient() {
+        // Simulamos un cliente existente
+        Client existingClient = new Client();
+        existingClient.setId(1L);
+        existingClient.setFirstName("John");
+        existingClient.setLastName("Doe");
+        existingClient.setDni(12345678L);
+        existingClient.setShowAds(true);
+
+        // Simulamos que el repositorio devuelve el cliente existente
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(existingClient));
+
+        // Nuevos detalles para el cliente (simulamos la actualización)
+        Client updatedDetails = new Client();
+        updatedDetails.setFirstName("Jane");
+        updatedDetails.setLastName("Doe");
+        updatedDetails.setDni(87654321L);
+        updatedDetails.setShowAds(false);
+
+        // Simulamos que el repositorio guarda el cliente actualizado
+        when(clientRepository.save(any(Client.class))).thenReturn(existingClient);
+
+        // Llamamos al método de actualización
+        Optional<Client> updatedClientOptional = updateClient(1L, updatedDetails);
+
+        // Verificamos que el método findById() fue invocado
+        verify(clientRepository, times(1)).findById(1L);
+
+        // Verificamos que el método save() fue invocado una vez
+        verify(clientRepository, times(1)).save(existingClient);
+
+        // Verificamos que los detalles del cliente se actualizaron correctamente
+        assertTrue(updatedClientOptional.isPresent()); // Verificamos que el cliente actualizado está presente
+        Client updatedClient = updatedClientOptional.get(); // Obtener el cliente actualizado
+        assertEquals("Jane", updatedClient.getFirstName());
+        assertEquals("Doe", updatedClient.getLastName());
+        assertEquals(87654321L, updatedClient.getDni());
+        assertFalse(updatedClient.getShowAds());
+    }
+
+
+    @Test
+    void testDeleteClient() {
+        // Simulamos un cliente existente
+        Client existingClient = new Client();
+        existingClient.setId(1L);
+        existingClient.setFirstName("John");
+        existingClient.setLastName("Doe");
+        existingClient.setDni(12345678L);
+        existingClient.setShowAds(true);
+
+        // Simulamos que el repositorio devuelve el cliente existente
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(existingClient));
+
+        // Llamamos al método que estamos probando (eliminar cliente)
+        clientRepository.delete(existingClient); // Eliminamos el cliente
+
+        // Verificamos que el método delete() fue invocado una vez
+        verify(clientRepository, times(1)).delete(existingClient);
+
+        // Verificamos que el cliente ya no se encuentra en el repositorio
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+        Optional<Client> deletedClient = clientRepository.findById(1L);
+
+        // Verificamos que el cliente eliminado no se encuentra
+        assertTrue(deletedClient.isEmpty());
+    }
+
+    @Test
+    void testDeleteClientNotFound() {
+        // Simulamos que el cliente no existe
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // Intentamos eliminar un cliente que no existe
+        assertThrows(NoSuchElementException.class, () -> {
+            clientRepository.delete(clientRepository.findById(1L).orElseThrow());
+        });
+
+        // Verificamos que el método findById() fue invocado
+        verify(clientRepository, times(1)).findById(1L);
+    }
+
 
 }

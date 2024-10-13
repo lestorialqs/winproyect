@@ -129,5 +129,43 @@ public class AppRepositoryTest extends AbstractContainerBaseTest {
         assertEquals("test@example.com", foundUser.get().getEmail());
         assertEquals("1234567890", foundUser.get().getPhoneNumber());
     }
+    @Test
+    void testUpdateAppUser() {
+        // Creamos nuevos detalles para el usuario
+        appUser1.setEmail("updated@example.com");
+        appUser1.setPhoneNumber("0987654321");
+
+        // Simulamos que el repositorio guarda el usuario actualizado
+        when(repository.save(appUser1)).thenReturn(appUser1);
+
+        // Llamamos al método de actualización
+        AppUser updatedUser = repository.save(appUser1);
+
+        // Verificamos que el método save() fue invocado una vez
+        verify(repository, times(1)).save(appUser1);
+
+        // Verificamos que los datos del usuario actualizado son correctos
+        assertEquals("updated@example.com", updatedUser.getEmail());
+        assertEquals("0987654321", updatedUser.getPhoneNumber());
+    }
+
+    @Test
+    void testDeleteAppUser() {
+        // Simulamos que el repositorio devuelve el AppUser
+        when(repository.findById(appUser1.getId())).thenReturn(Optional.of(appUser1));
+
+        // Llamada directa al repositorio para eliminar el usuario
+        repository.delete(appUser1);
+
+        // Verificamos que el método delete() fue invocado una vez
+        verify(repository, times(1)).delete(appUser1);
+
+        // Verificamos que el usuario ya no está presente
+        when(repository.findById(appUser1.getId())).thenReturn(Optional.empty());
+        Optional<AppUser> deletedUser = repository.findById(appUser1.getId());
+
+        assertFalse(deletedUser.isPresent());
+    }
+
 
 }

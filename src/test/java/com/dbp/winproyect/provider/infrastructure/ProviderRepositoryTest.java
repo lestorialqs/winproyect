@@ -37,6 +37,7 @@ public class ProviderRepositoryTest extends AbstractContainerBaseTest {
         assertEquals("provider@example.com", savedProvider.getEmail());
         assertEquals("1122334455", savedProvider.getPhoneNumber());
     }
+
     @Test
     public void testFindById() {
         Provider provider = new Provider();
@@ -57,6 +58,7 @@ public class ProviderRepositoryTest extends AbstractContainerBaseTest {
         assertNotNull(foundProvider);
         assertEquals(savedProvider.getId(), foundProvider.getId());
     }
+
     @Test
     public void testDeleteById() {
         Provider provider = new Provider();
@@ -81,5 +83,47 @@ public class ProviderRepositoryTest extends AbstractContainerBaseTest {
         assertNull(deletedProvider);
     }
 
+    @Test
+    public void testUpdateProvider() {
+        Provider provider = new Provider();
+        provider.setRuc(222333444L);
+        provider.setEstate(true);
+        provider.setRating(4.0f);
+        provider.setComission(0.15);
+        provider.setEmail("provider4@example.com");
+        provider.setPhoneNumber("1231231234");
 
+        // Guarda el proveedor
+        Provider savedProvider = providerRepository.save(provider);
+
+        // Actualiza los detalles del proveedor
+        savedProvider.setRating(4.8f);
+        savedProvider.setComission(0.18);
+        Provider updatedProvider = providerRepository.save(savedProvider);
+
+        // Verifica que los detalles se hayan actualizado correctamente
+        assertEquals(4.8f, updatedProvider.getRating());
+        assertEquals(0.18, updatedProvider.getComission());
+    }
+
+    @Test
+    public void testFindByEmail() {
+        Provider provider = new Provider();
+        provider.setRuc(333444555L);
+        provider.setEstate(true);
+        provider.setRating(4.5f);
+        provider.setComission(0.25);
+        provider.setEmail("provider5@example.com");
+        provider.setPhoneNumber("5556667777");
+
+        // Guarda el proveedor
+        providerRepository.save(provider);
+
+        // Busca el proveedor por correo electrónico
+        Provider foundProvider = providerRepository.findByEmail("provider5@example.com").orElse(null);
+
+        // Verifica que el proveedor fue encontrado
+        assertNotNull(foundProvider);
+        assertEquals(provider.getEmail(), foundProvider.getEmail());
+    }
 }

@@ -1,14 +1,11 @@
 package com.dbp.winproyect.provider.infrastructure;
 
 import static com.dbp.winproyect.enterprise.domain.Size.MEDIANA;
-import static javax.swing.text.StyleConstants.Size;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-//import static org.testcontainers.shaded.com.google.common.math.LongMath.MillerRabinTester.LARGE;
 
 import com.dbp.winproyect.enterprise.domain.BusinessSector;
 import com.dbp.winproyect.enterprise.domain.Enterprise;
-import com.dbp.winproyect.provider.infrastructure.ProviderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -78,23 +75,41 @@ public class EnterpriseRepositoryTest {
         when(providerRepository.findByRuc(12345678901L)).thenReturn(Optional.of(existingEnterprise));
 
         // Nuevos detalles para la empresa
-        Enterprise updatedEnterpriseDetails = new Enterprise();
-        updatedEnterpriseDetails.setName("NewTechCorp");
-        updatedEnterpriseDetails.setDescription("Innovative tech solutions");
+        existingEnterprise.setName("NewTechCorp");
+        existingEnterprise.setDescription("Innovative tech solutions");
 
         // Simulamos que el repositorio guarda la empresa actualizada
-        when(providerRepository.save(any(Enterprise.class))).thenReturn(updatedEnterpriseDetails);
+        when(providerRepository.save(any(Enterprise.class))).thenReturn(existingEnterprise);
 
         // Llamada directa para actualizar la empresa
-        Enterprise updatedEnterprise = providerRepository.save(updatedEnterpriseDetails);
+        Enterprise updatedEnterprise = providerRepository.save(existingEnterprise);
 
         // Verificamos que el método save() fue invocado una vez
-        verify(providerRepository, times(1)).save(updatedEnterpriseDetails);
+        verify(providerRepository, times(1)).save(existingEnterprise);
 
         // Verificamos que los detalles de la empresa se actualizaron correctamente
         assertEquals("NewTechCorp", updatedEnterprise.getName());
         assertEquals("Innovative tech solutions", updatedEnterprise.getDescription());
     }
+
+    @Test
+    void testDeleteEnterprise() {
+        // Simulamos que el repositorio devuelve la Enterprise por su RUC
+        when(providerRepository.findByRuc(12345678901L)).thenReturn(Optional.of(enterprise));
+
+        // Llamada directa para eliminar la empresa
+        providerRepository.delete(enterprise);
+
+        // Verificamos que el método delete() fue invocado una vez
+        verify(providerRepository, times(1)).delete(enterprise);
+
+        // Verificamos que la empresa ya no está presente
+        when(providerRepository.findByRuc(12345678901L)).thenReturn(Optional.empty());
+        Optional<Enterprise> deletedEnterprise = providerRepository.findByRuc(12345678901L);
+
+        assertFalse(deletedEnterprise.isPresent());
+    }
+
     @Test
     void testInvalidRuc() {
         enterprise.setRuc(null);
@@ -103,6 +118,4 @@ public class EnterpriseRepositoryTest {
         enterprise.setRuc(-1L);
         assertTrue(enterprise.getRuc() < 0);
     }
-
 }
-

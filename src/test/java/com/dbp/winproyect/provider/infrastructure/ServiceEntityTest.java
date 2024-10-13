@@ -50,6 +50,7 @@ public class ServiceEntityTest extends AbstractContainerBaseTest {
         serviceEntity2.setSuggestedPrice(15.0);
         serviceEntity2.setAvg_rating(4.5f);
         serviceEntity2.setProvider(provider2);
+
         // Simula que el método save() devuelve una entidad con un ID
         when(serviceEntityRepository.save(any(ServiceEntity.class))).thenAnswer(invocation -> {
             ServiceEntity entity = invocation.getArgument(0);
@@ -82,8 +83,9 @@ public class ServiceEntityTest extends AbstractContainerBaseTest {
         Assertions.assertThat(serviceEntityList).isNotNull();  // Comprueba que la lista no sea null
         Assertions.assertThat(serviceEntityList.size()).isEqualTo(2);  // Verifica que haya 2 entidades en la lista
     }
+
     @Test
-    public void testServiceEntityRepositoryFindById(){
+    public void testServiceEntityRepositoryFindById() {
         // Guarda la entidad
         serviceEntity = serviceEntityRepository.save(serviceEntity);
 
@@ -103,6 +105,7 @@ public class ServiceEntityTest extends AbstractContainerBaseTest {
             fail("ServiceEntity with id " + serviceEntity.getId() + " not found");
         }
     }
+
     @Test
     public void testFindByName() {
         // Simula la búsqueda por nombre
@@ -119,6 +122,7 @@ public class ServiceEntityTest extends AbstractContainerBaseTest {
         assertEquals(serviceEntity.getName(), foundEntity.getName());
         assertEquals(serviceEntity.getDescription(), foundEntity.getDescription());
     }
+
     @Test
     public void testDeleteById() {
         // Guarda la entidad en el repositorio (simulado)
@@ -132,5 +136,42 @@ public class ServiceEntityTest extends AbstractContainerBaseTest {
 
         // Verifica que el método deleteById fue llamado exactamente una vez con el ID correcto
         verify(serviceEntityRepository, times(1)).deleteById(serviceEntity.getId());
+    }
+
+    @Test
+    public void testUpdateServiceEntity() {
+        // Guarda la entidad inicialmente
+        serviceEntity = serviceEntityRepository.save(serviceEntity);
+
+        // Simula la actualización de la entidad
+        serviceEntity.setSuggestedPrice(120.0);
+        serviceEntity.setAvg_rating(4.8f);
+
+        when(serviceEntityRepository.save(serviceEntity)).thenReturn(serviceEntity); // Simula el guardado
+
+        // Guarda la entidad actualizada
+        ServiceEntity updatedEntity = serviceEntityRepository.save(serviceEntity);
+
+        // Verifica que los valores se hayan actualizado correctamente
+        assertEquals(120.0, updatedEntity.getSuggestedPrice());
+        assertEquals(4.8f, updatedEntity.getAvg_rating());
+    }
+
+    @Test
+    public void testAverageRatingCalculation() {
+        // Calcula el promedio de calificaciones para las entidades de servicio
+        when(serviceEntityRepository.findAll()).thenReturn(List.of(serviceEntity, serviceEntity2));
+
+        List<ServiceEntity> serviceEntityList = serviceEntityRepository.findAll();
+
+        float totalRating = 0.0f;
+        for (ServiceEntity entity : serviceEntityList) {
+            totalRating += entity.getAvg_rating();
+        }
+
+        float averageRating = totalRating / serviceEntityList.size();
+
+        // Verifica que el promedio de calificaciones sea correcto
+        assertEquals(4.5f, averageRating, 0.01f, "Average rating should be 4.5");
     }
 }
