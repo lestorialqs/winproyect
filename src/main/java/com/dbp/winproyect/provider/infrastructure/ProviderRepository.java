@@ -1,5 +1,6 @@
 package com.dbp.winproyect.provider.infrastructure;
 
+import com.dbp.winproyect.enterprise.domain.Enterprise;
 import com.dbp.winproyect.provider.domain.Provider;
 import java.util.Optional;
 
@@ -12,4 +13,6 @@ import org.springframework.stereotype.Repository;
 
 public interface ProviderRepository extends JpaRepository<Provider, Long> {
     Optional<Provider> findByEmail(String email);
+
+    Optional<Enterprise> findByRuc(long l);
 }
