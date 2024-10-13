@@ -57,7 +57,7 @@ public class ClientRepositoryTest extends AbstractContainerBaseTest {
         when(clientRepository.findByEmail("client@example.com")).thenReturn(Optional.of(client));
 
         // Llamada directa al repositorio
-        Optional<AppUser> foundUser = clientRepository.findByEmail("client@example.com");
+        Optional<Client> foundUser = clientRepository.findByEmail("client@example.com");
 
         // Verificamos que el método findByEmail() fue invocado una vez
         verify(clientRepository, times(1)).findByEmail("client@example.com");

@@ -42,13 +42,18 @@ public class ServiceEntityService {
     private TagService tagService;
     @Autowired
     private ReviewService reviewService;
-
+    @Autowired
+    public ServiceEntityService(ModelMapper modelMapper, ServiceEntityRepository serviceEntityRepository, ProviderService providerService) {
+        this.modelMapper = modelMapper;
+        this.serviceEntityRepository = serviceEntityRepository;
+        this.providerService = providerService;
+    }
     public ServiceEntityService( ServiceEntityRepository serviceEntityRepository, ProviderService providerService ) {
         this.serviceEntityRepository = serviceEntityRepository;
         this.providerService = providerService;
     }
-
-    public List<ServiceDtoResponse> obtenerServiciosPorTag(ServiceTag tagName) {
+// CAMBIOS LUIS:
+    /*public List<ServiceDtoResponse> obtenerServiciosPorTag(ServiceTag tagName) {
         // Buscar los servicios que tienen el tag en su conjunto de tags
         List<ServiceEntity> serviceEntities = serviceEntityRepository.findAllByTags_Name(tagName);
 
@@ -56,7 +61,16 @@ public class ServiceEntityService {
         return serviceEntities.stream()
                 .map(serviceEntity -> modelMapper.map(serviceEntity, ServiceDtoResponse.class))
                 .collect(Collectors.toList());
-    }
+    }*/
+public List<ServiceDtoResponse> obtenerServiciosPorTag(ServiceTag tagName) {
+    // Buscar los servicios que tienen el tag en su conjunto de tags
+    List<ServiceEntity> serviceEntities = serviceEntityRepository.findAllByTags_Name(ServiceTag.valueOf(tagName.name()));
+
+    // Mapear las entidades a DTOs
+    return serviceEntities.stream()
+            .map(serviceEntity -> modelMapper.map(serviceEntity, ServiceDtoResponse.class))
+            .collect(Collectors.toList());
+}
 
 
     //Permite a un proveedor publicar un servicio.
