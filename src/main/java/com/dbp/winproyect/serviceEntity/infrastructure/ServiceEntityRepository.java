@@ -19,9 +19,5 @@ import java.util.Set;
 public interface ServiceEntityRepository extends JpaRepository<ServiceEntity, Long> {
 
     List<ServiceEntity> findAllByTags_Name(ServiceTag tagName);
-<<<<<<< HEAD
-
-=======
     Optional<ServiceEntity> findByName(String name);
->>>>>>> main
 }
