@@ -17,6 +17,10 @@ public class FreelancerService {
     private final ModelMapper modelMapper;
 
 
+    public boolean existsById(Long freelancerId) {
+        return freelancerRepository.existsById(freelancerId);
+    }
+
     // Méetodo para obtener el perfil de un freelancer
     public FreelancerDtoViewPerfilResponse obtenerPerfilFreelancer(Long freelancerId) {
         Freelancer freelancer = freelancerRepository.findById(freelancerId)

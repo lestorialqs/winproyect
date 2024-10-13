@@ -39,19 +39,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         logger.info("Request received at JwtAuthenticationFilter: " + request.getRequestURI());
 
+        // Verificar si el encabezado Authorization está presente y tiene el formato adecuado
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7); // Extraer el token
             try {
-                jwt = authorizationHeader.substring(7);
-                username = jwtService.extractUsername(jwt);
-                logger.info("JWT Token extracted: " + jwt);
-                logger.info("Extracted username: " + username);
+                username = jwtService.extractUsername(jwt); // Extraer el nombre de usuario
+                logger.info("JWT Token extracted: {}", jwt);
+                logger.info("Extracted username: {}", username);
             } catch (Exception e) {
-                logger.error("Error extracting JWT: " + e.getMessage());
+                logger.error("Error extracting JWT: {}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;  // Detener la ejecución si hay un error con el JWT
             }
         }
 
+        // Verificar si el usuario no está autenticado
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             logger.info("Username found in JWT token, proceeding with user authentication");
 
@@ -60,9 +62,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Validar el token
             if (jwtService.validateToken(jwt, userDetails)) {
+                // Crear el objeto de autenticación y establecerlo en el contexto de seguridad
                 var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                logger.info("User authenticated: " + username);
+                logger.info("User authenticated: {}", username);
             } else {
                 logger.error("Invalid JWT Token");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -72,6 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             logger.info("No JWT token found in request or user already authenticated");
         }
 
+        // Continuar con la cadena de filtros
         filterChain.doFilter(request, response);
     }
 }
