@@ -5,10 +5,10 @@ IP al Proyecto en AWS: 3.90.105.181
 ## CS 2031 Desarrollo Basado en Plataformas
 
 ### Integrantes
-- Sebastian Antonio Hernandez Miñano
-- Henry Rutber Quispe Sutta
-- Andrés Martín Benjamín Torres Ramos
-- Luis Javier Millones Carrasco
+- Sebastian Antonio Hernandez Miñano (202320043)
+- Henry Rutber Quispe Sutta (202320078)
+- Andrés Martín Benjamín Torres Ramos (202320163)
+- Luis Javier Millones Carrasco (202320115)
 
 ## Índice
 
