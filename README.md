@@ -2,9 +2,6 @@
 
 ## CS 2031 Desarrollo Basado en Plataformas
 
-![Descripción de la imagen](https://lh3.googleusercontent.com/LDCxZNaQyYHPSnggss4PuX6dUCnletxobqQ0un_x1mZv_5s8uX9OT1TwkRJqvBZY8cfjflovHe1ChiPsWFTI3KU=w1280)
-
-
 ### Integrantes
 - Sebastian Antonio Hernandez Miñano
 - Henry Rutber Quispe Sutta
@@ -44,8 +41,10 @@
     - [Prevención de Vulnerabilidades](#prevención-de-vulnerabilidades)
 7. [**Eventos y Asincronía**](#eventos-y-asincronía)
 8. [**GitHub**](#github)
-9. [**Conclusiones**](#conclusiones)
-10. [**Apéndices**](#apéndices)
+    - [GitHub Action](#GitHub-Actions)
+    - [GitHub Projects](#GitHub-projects)
+10. [**Conclusiones**](#conclusiones)
+11. [**Apéndices**](#apéndices)
 
 ## Introducción
 
@@ -93,40 +92,45 @@ Para resolver la necesidad de una plataforma eficiente que conecte usuarios con 
 
 #### Generales
 - **Permitir la negociación del precio final por el producto**
-- **Geolocalización por medio de la Api de Google Maps**
+- **Geolocalización por medio de la API de Google Maps**
 
 
 ### Tecnologías implementadas
-Para el desarrollo de **ATuServicio**, utilizaremos **IntelliJ** como entorno de desarrollo integrado (IDE) debido a la amplia variedad de herramientas que ofrece para trabajar con Java y Spring Boot.
+Para el desarrollo de **ATuServicio**, utilizaremos **IntelliJ** como IDE, aprovechando sus herramientas para Java y Spring Boot.
 
-El backend de la aplicación se desarrollará en **Java**, utilizando el framework **Spring** por su facilidad de integración con herramientas como **Tomcat** y **Docker**, su amplio uso en aplicaciones profesionales y su sólida comunidad, que proporciona documentación y soluciones a posibles problemas.
+El backend se desarrollará en **Java** con el framework **Spring**, facilitando la integración con **Tomcat** y **Docker**, y beneficiándonos de su amplia comunidad y documentación.
 
-Además, utilizaremos **PostgreSQL** ejecutándose en **Docker** para la gestión de la base de datos.
+Usaremos una imagen de **PostgreSQL** en **Docker** para la gestión de la base de datos.
 
-Por último, realizaremos el despliegue en **Amazon Web Services (AWS)**.
+Además, implementaremos **WebSockets** para el **chat en vivo**, y utilizaremos el **API de Reniec** para validar **RUC** y **DNI**. También integraremos el **API de Google Maps** para obtener direcciones y enlaces de ubicación.
+
+Finalmente, el despliegue se realizará en **Amazon Web Services (AWS)**, aprovechando su infraestructura escalable.
+
+
 
 ## Modelado de entidades
 
 ### Diagrama de entidades
-_Aquí va el diagrama entidad-relación_
+
+![diagrama de flujo](https://hackmd.io/_uploads/BJg5sgc1Jx.png)
 
 ### Descripción de entidades
 
 #### User
-**Descripción**:  
+**Descripción**:
 Representa a los usuarios que pueden solicitar servicios en la plataforma.
 
 **Atributos**:
 - `Long id` (Primary Key)
-- `LocalDateTime registration_date`
+- `LocalDateTime registrationDate`
 - `String email`
 - `String password`
 - `String phoneNumber`
 - `String address`
-- `Rol rol` (Enum)
+- `Role role` (Enum)
 
-**Relaciones**:  
-Relación one-to-one con **Location**.  
+**Relaciones**:
+Relación one-to-one con **Location**.
 Relación de herencia con las entidades **Provider** y **Client**.
 
 **DTOs:**
@@ -137,25 +141,26 @@ UserLoginDto:
 
 
 #### Provider
-**Descripción**:  
-Subclase de **User**  
+**Descripción**:
+Subclase de **User**
 Representa a los proveedores de los diferentes servicios dentro de la aplicación.
 
 **Atributos**:
+- `Long ruc`
 - `Boolean estate`
-- `Integer rating`
+- `Float rating`
 - `Double comission`
-- `String ruc`
 
-**Relaciones**:  
-Relación many-to-many con **ServiceEntity**.  
+
+**Relaciones**:
+Relación many-to-many con **ServiceEntity**.
 Relación de herencia con las entidades **Freelancer** y **Enterprise**.
 
 
 
 #### Client
-**Descripción**:  
-Subclase de **User**  
+**Descripción**:
+Subclase de **User**
 Define a los clientes que solicitan servicios en la plataforma.
 
 **Atributos**:
@@ -174,6 +179,14 @@ ClientDtoViewPerfilResponse:
 - `String address`
 - `String email`
 
+ClientUpdateDto:
+- `String first_name`
+- `String last_name`
+- `String phoneNumber`
+- `String address`
+- `String email`
+- `String dni`
+
 ClientDtoRegister:
 - `String first_name`
 - `String last_name`
@@ -186,17 +199,17 @@ ClientDtoRegister:
 
 
 #### Freelancer
-**Descripción**:  
-Subclase de **Provider**  
+**Descripción**:
+Subclase de **Provider**
 Representa a un proveedor autónomo.
 
 **Atributos**:
-- `String first_name`
-- `String last_name`
-- `String speciality`
+- `String firstName`
+- `String lastName`
 - `String experience`
-- `String grade`
-- `Long dni`
+- `String levelEducation`
+- `Integer dni`
+- `Integer age`
 
 **DTOs:**
 
@@ -209,17 +222,17 @@ FreelancerDtoRegister:
 - `String email`
 - `Long dni`
 
-FreelancerDtoUpdateProfile:
+FreelancerUpdateDto:
 - `String first_name`
 - `String last_name`
 - `Integer age`
-- `Long phoneNumber`
-- `String address`
-- `Long dni`
-- `String email`
+- `Integer dni`
 - `LevelEducation levelEducation`
 - `String experience`
-- `String speciality`
+- `Long phoneNumber`
+- `String address`
+- `String email`
+
 
 FreelancerDtoViewPerfilResponse:
 - `String first_name`
@@ -234,14 +247,14 @@ FreelancerDtoViewPerfilResponse:
 
 
 #### Enterprise
-**Descripción**:  
-Subclase de **Provider**  
+**Descripción**:
+Subclase de **Provider**
 Representa a una empresa que ofrece servicios.
 
 **Atributos**:
+- `Long ruc`
 - `String name`
 - `String description`
-- `Long ruc`
 - `Size size` (ENUM)
 - `BusinessSector businessSector` (ENUM)
 - `String address`
@@ -257,13 +270,14 @@ EnterpriseDtoRegister:
 - `BusinessSector businessSector` (ENUM)
 
 EnterpriseDtoUpdateProfile:
-- `Long ruc`
 - `String name`
 - `String description`
-- `String email`
-- `String address`
 - `Size size` (ENUM)
 - `BusinessSector businessSector` (ENUM)
+- `Long phoneNumber`
+- `String address`
+- `String email`
+
 
 EnterpriseDtoViewPerfilResponse:
 - `Long ruc`
@@ -275,50 +289,73 @@ EnterpriseDtoViewPerfilResponse:
 - `BusinessSector businessSector` (ENUM)
 
 #### Location
-**Descripción**:  
+**Descripción**:
 Define la ubicación del usuario.
 
 **Atributos**:
-- `Long id_location` (Primary Key)
-- `String description`
-- `String coordinates`
+- `Long idLocation` (Primary Key)
+- `String address`
+- `Double latitude`
+- `Double longitude`
 
 **DTOs:**
 
 LocationResponseDto:
-- `String coordinates`
+- `String formattedAddress`
+- `Double latitude`
+- `Double longitude`
+- `String message`
+- `String status`
+- `String googleMapsLink`
 
 #### Arrangement
-**Descripción**:  
+**Descripción**:
 Registra el acuerdo entre un proveedor y un cliente para un servicio.
 
 **Atributos**:
-- `Long id_procedure` (Primary Key)
-- `LocalDateTime start_date`
-- `LocalDateTime end_date`
-- `String location`
-- `Double agreed_amount`
-- `Long id_payment`
+- `Long id` (Primary Key)
+- `LocalDateTime date`
+- `String Status`
+- `Float price`
 
 **DTOs:**
-LocationResponseDto:
-- `LocalDateTime start_date`
-- `LocalDateTime end_date`
-- `String location`
-- `Double agreed_amount`
+ArragementResponseDto:
+- `String FirstName`
+- `String LastName`
+- `String PhoneNumber`
+- `Double String email`
+
+ArrangementRequestDto:
+- `Float price`
+
+**Relaciones**:
+Relación many-to-one con **Client**.
+Relación many-to-one con **ServiceEntity**.
 
 #### Payment
-**Descripción**:  
+**Descripción**:
 Almacena la información del pago realizado por un servicio.
 
 **Atributos**:
 - `Long id_payment` (Primary Key)
 - `Double amount`
 - `String method`
+- `String currency`
 - `LocalDateTime date`
 
+**DTOs:**
+PaymentRequestDto:
+- `Double amount`
+- `String currency`
+- `Method method`(Enum)
+
+
+**Relaciones**:
+Relación one-to-one con **Arrangement**.
+
+
 #### ServiceEntity
-**Descripción**:  
+**Descripción**:
 Define los servicios ofrecidos por los providers dentro de la plataforma.
 
 **Atributos**:
@@ -327,312 +364,219 @@ Define los servicios ofrecidos por los providers dentro de la plataforma.
 - `Double suggested_price`
 - `String name`
 - `String location`
-- `String tag`
+- `String address`
+- `Tag tags` (Lista)
+
+**DTOs:**
+ServiceDtoRequest:
+- `String description`
+- `String name`
+- `String address`
+- `Double suggestedPrice`
+- `Tag tags` (Lista)
+
+ServiceDtoResponse:
+- `String name`
+- `String nameProvider`
+- `String description`
+- `String address`
+- `Double suggestedPrice`
+- `Float avg_rating`
+- `Page<Review> pageableReviews`
+- `Tag tags` (Lista)
+
+
+**Relaciones**:
+Relación many-to-one con **Provider**.
+
+
 
 #### Review
-**Descripción**:  
+**Descripción**:
 Registra las calificaciones y comentarios de los usuarios sobre los servicios recibidos.
 
 **Atributos**:
 - `Long id_review` (Primary Key)
 - `Integer rating`
-- `Date date`
+- `ZonedDateTime date`
 - `String comment`
 - `Boolean edited`
 
-**Relaciones**:  
-Relación many-to-one con **ServiceEntity**.  
-Relación de herencia con las entidades **Freelancer** y **Enterprise**.
-
 **DTOs:**
 
-ReviewRequestDto:
+ReviewDtoCreateRequest
 - `Integer rating`
 - `String comment`
-- `Long serviceId`
 - `Long userId`
+
+ReviewEditRequestDto:
+- `Integer rating`
+- `String comment`
+
+**Relaciones**:
+Relación many-to-one con **ServiceEntity**.
+Relación many-to-one con **Client**.
+
 
 ## Testing y Manejo de Errores
 
 ### Niveles de Testing Realizados
 
-### Resultados
+Niveles de Testing Realizados
+En el desarrollo del proyecto, se han llevado a cabo diversos niveles de testing para garantizar la calidad y robustez del software. A continuación, se detallan los niveles de testing implementados:
+
+### Tests Realizados
+
+Sea realizó los tests usando el framework de Mockito para el testing en el Service Layer de las entidades más importantes y Test containers para el test de Repositorio.
+
+
+A continuación imágenes de tests en las dos capas:
+![image](https://hackmd.io/_uploads/rJS8cbc11l.png)
+![image](https://hackmd.io/_uploads/Sk-wqWcyJg.png)
+
+
+### TESTS EN EJECUCIÓN:
+A continuación imágenes de tests en ejecución:
+![image](https://hackmd.io/_uploads/BJZs9Zc1Jx.png)
+![image](https://hackmd.io/_uploads/Hkon5-5kyl.png)
+![image](https://hackmd.io/_uploads/rJoa5bqJ1g.png)
+![image](https://hackmd.io/_uploads/SkylsW5kJx.png)
+![image](https://hackmd.io/_uploads/ryW4sbcJkl.png)
+![image](https://hackmd.io/_uploads/Bk_wiW9yyl.png)
+![image](https://hackmd.io/_uploads/BJUYib51yl.png)
+![image](https://hackmd.io/_uploads/S1psjZqyyx.png)
+![image](https://hackmd.io/_uploads/BJoTiZc11l.png)
+
 
 ### Manejo de errores
+El manejo de errores es crucial para proporcionar una experiencia de usuario fluida y confiable. En el proyecto, se han implementado diversas estrategias para gestionar errores y excepciones:
 
+1. Excepciones Personalizadas
+   Se han definido excepciones personalizadas para manejar casos de error específicos en el negocio, como EntityNotFoundException o InvalidInputException. Estas excepciones permiten capturar y manejar errores de manera controlada y proporcionar mensajes de error significativos al usuario.
 ## Medidas de Seguridad Implementadas
 
 ### Seguridad de Datos
+- **Autenticación basada en tokens JWT:**
+  En **ATuServicio**, implementamos un sistema de autenticación que utiliza JSON Web Tokens (JWT) para verificar la identidad de los usuarios. Al momento de autenticar, se genera y se envía un token JWT en el encabezado de autorización de la solicitud HTTP. Este token es validado para garantizar que el acceso sea seguro.
+
+- **Filtro de autenticación personalizado:**
+  Desarrollamos un filtro de autenticación personalizado (**JwtAuthenticationFilter**), que se ejecuta para cada solicitud HTTP. Este filtro extrae el token JWT del encabezado de autorización y verifica su validez, lo que permite gestionar la autenticación en el contexto de seguridad de la aplicación.
+
+- **Seguridad a nivel de método:**
+  Utilizamos la anotación **@EnableMethodSecurity** en **ATuServicio** para implementar seguridad a nivel de método. Esto permite proteger los métodos individuales en las clases de servicio, asegurando que se respeten las restricciones de acceso establecidas.
+
+- **Política de creación de sesión sin estado:**
+  La configuración de seguridad de **ATuServicio** establece que el sistema opere bajo una política de creación de sesión sin estado. Esto significa que no se almacenarán sesiones en el servidor; en su lugar, cada solicitud se autenticará de manera independiente utilizando el token JWT proporcionado.
+
+- **Control de acceso basado en roles:**
+  Implementamos un sistema de control de acceso que permite la reclamación de roles dentro del servicio. Esto significa que los permisos se asignan a los usuarios de acuerdo a su rol, garantizando que solo puedan acceder a las funcionalidades que les corresponden.
 
 ### Prevención de Vulnerabilidades
+- **Prevención de inyección SQL:**
+  En **ATuServicio**, se emplean prácticas para prevenir la inyección SQL mediante el uso de JPA y consultas preparadas. Esto asegura que los parámetros de las consultas se gestionen de forma segura y no se vean comprometidos.
+
+- **Prevención de ataques XSS:**
+  Se implementaron medidas en **ATuServicio** para proteger contra ataques de tipo Cross-Site Scripting (XSS). Spring Boot proporciona soporte para mitigar estos riesgos a través de la configuración adecuada y el uso de plantillas seguras.
+
+- **Prevención de falsificación de solicitudes entre sitios (CSRF):**
+  Se desactivó la protección CSRF en **ATuServicio**, dado que el acceso se realiza a través de una API RESTful. Se espera que los clientes sean aplicaciones de terceros, no navegadores, y se ha diseñado la API para facilitar este tipo de acceso de manera segura.
 
 ## Eventos y Asincronía
 
+En **ATuServicio**, se implementaron diversas estrategias de asincronía para mejorar la experiencia del usuario:
+
+- **API de Maps:** Se utiliza la API de Maps para gestionar ubicaciones de manera eficiente. Las solicitudes a esta API se manejan de forma asíncrona, permitiendo que la aplicación continúe funcionando mientras se obtienen los datos de ubicación.
+
+- **Verificación de DNI y RUC:** La validación de DNI y RUC a través de las APIs de **RENIEC** y **SUNAT** se realiza de manera asíncrona, asegurando que el proceso de autenticación no bloquee la interfaz de usuario y se mantenga ágil.
+
+- **Chat en tiempo real con Websockets:** La implementación de Websockets permite la comunicación en tiempo real entre los usuarios. Esto facilita un chat en vivo eficiente, donde los mensajes se envían y reciben instantáneamente, mejorando la interacción entre los clientes y proveedores de servicios.
+
+
 ## GitHub
+
+### GitHub Projects
+
+Durante el desarrollo de **ATuServicio**, utilizamos **GitHub Projects** para gestionar y organizar nuestras tareas de manera eficiente. A continuación se detallan las principales características y prácticas que implementamos:
+
+- **Asignación de Issues:** Creamos **issues** para cada tarea, bug o mejora necesaria. Cada miembro del equipo era responsable de asignarse los issues correspondientes, lo que facilitó la distribución del trabajo y la responsabilidad individual.
+
+- **Deadlines:** Establecimos **deadlines** para cada issue, asegurando que todas las tareas se completaran dentro de un marco temporal específico. Esto nos permitió mantener un ritmo de trabajo constante y cumplir con los plazos del proyecto.
+
+
+### GitHub Actions
+
+Para la automatización de tareas y la mejora del flujo de trabajo, implementamos **GitHub Actions** en nuestro proyecto. A continuación se describen los flujos que configuramos:
+
+- **Integración Continua (CI):** Configuramos acciones para ejecutar pruebas automáticamente cada vez que se realizaba un **push** a la rama principal. Esto garantizó que el código comprometido no rompiera la funcionalidad existente y que las nuevas características funcionaran como se esperaba.
+
+- **Despliegue Automático:** Implementamos un flujo de trabajo para el despliegue automático de la aplicación en un entorno de prueba cada vez que se creaba un **pull request**. Esto permitió a los miembros del equipo revisar y probar los cambios antes de fusionarlos en la rama principal.
+
+- **Notificaciones:** Configuramos notificaciones para alertar al equipo sobre el estado de las acciones, informando si las pruebas habían fallado o si el despliegue se había realizado con éxito. Esto ayudó a mantener a todos informados sobre el progreso y los posibles problemas en tiempo real.
+
+- **Mantenimiento de Versiones:** Utilizamos GitHub Actions para gestionar el versionado de la aplicación, generando automáticamente versiones nuevas basadas en las etiquetas al momento del despliegue.
+
+Estos procesos en **GitHub** facilitaron una colaboración más eficiente y aseguraron que el proyecto avanzara de manera organizada y controlada.
+
 
 ## Conclusiones
 
+En esta primera fase del proyecto **ATuServicio**, hemos logrado construir una base sólida para la implementación del backend utilizando **Spring Boot**. A lo largo del desarrollo, hemos enfrentado diversos retos técnicos y adquirido habilidades importantes que serán clave para las próximas etapas del proyecto.
+
+## Logros del Proyecto
+
+- **Diseño e implementación del modelo de datos:**
+  Creación de un modelo entidad-relación con **AppUser**, **Client**, **Freelance**, **Provider**, y **Enterprise**.
+
+- **Creación de Endpoints HTTP:**
+  Endpoints para gestionar usuarios, servicios, acuerdos y autenticación con operaciones CRUD.
+
+- **Seguridad del Sistema:**
+  Autenticación con **tokens JWT** y validaciones de **RUC** y **DNI** usando las APIs de **SUNAT** y **Reniec**.
+
+- **Pruebas de Integración:**
+  Pruebas con **Testcontainers** para validar acceso y restricciones por roles y tokens.
+
+- **Uso de Websockets:**
+  Implementación de Websockets para chat en vivo.
+
+- **Consumo de APIs:**
+  Integración de APIs externas para funcionalidades adicionales.
+
+- **Manejo de GitHub:**
+  Mejora en la gestión de versiones y colaboración en equipo.
+
+
+## Aprendizajes Clave
+
+- **Uso de Spring Boot:**
+  Desarrollo de aplicaciones backend con enfoque en seguridad y autenticación.
+
+- **Colaboración en GitHub:**
+  Gestión efectiva de versiones y ramas en equipo.
+
+- **Seguridad:**
+  Implementación de sistemas para proteger datos sensibles.
+
+- **Uso de Websockets:**
+  Chat en vivo para interacción en tiempo real.
+
+- **Consumo de APIs:**
+  Integración de la API de **RENIEC** para validación de documentos y la API de **Maps** para ubicaciones.
+
+
+## Trabajo Futuro
+
+- **Desarrollo del Frontend:**
+  La siguiente fase se centrará en la interfaz de usuario, permitiendo la interacción fluida con las funcionalidades del backend.
+
+- **Implementación de Funcionalidades Avanzadas:**
+  Planificamos agregar funciones como recompensas, reseñas y la gestión avanzada de interacciones entre usuarios y proveedores de servicios.
+
+
 ## Apéndices
+### Licencia
+- #### APACHE LICENSE 2.0
 
+### Referencias
+- link del diagrama de entidad relación: [Diagrama entidad relacion](https://drive.google.com/file/d/1Hz45UzKET_EbHwXHYUvbXpdWT7WgiFMR/view?usp=sharing)
 
-# Endpoints para ATuServicio
-
-
-
-## Endpoints para User
-
-## 1. Registro de Usuario
-- **POST** /user/register
-    - **Descripción**: Selecciona si eres Client o Provider.
-    - **Cuerpo**:
-      ```json
-      {
-        "type": "ENUM"  
-      }
-      ```
-
-
-# Endpoints para Client
-
-## 1. Registro de Clientes
-- **POST** /client/register
-    - **Descripción**: Permite a un nuevo usuario registrarse en la plataforma.
-    - **Cuerpo**:
-      ```json
-      {
-        "email": "string",
-        "password": "string",
-        "phoneNumber": "string",
-        "address": "string"
-      }
-      ```
-
-## 2. Iniciar Sesión de Clientes
-- **POST** /client/login
-    - **Descripción**: Permite a un usuario iniciar sesión en la plataforma.
-    - **Cuerpo**:
-      ```json
-      {
-        "email": "string",
-        "password": "string"
-      }
-      ```
-
-## 3. Obtener Información de un Cliente
-- **GET** /client/{id}
-    - **Descripción**: Recupera la información del usuario especificado.
-    - **Cuerpo**:
-      ```json
-      {
-        "firsname": "string",
-        "lastname": "string",
-        "dni": "string",
-        "phonenumber": "string",
-        "email": "string"
-      }
-      ```
-
-## 6. Obtener Historial de Servicios
-- **GET** /client/{id}/arrangements
-    - **Descripción**: Recupera el historial de servicios solicitados por un cliente.
-
----
-
-# Endpoints para Proveedores
-
-## 1. Registro de Proveedor
-- **POST** /provider/register
-    - **Descripción**: Permite a un proveedor registrarse como empresa o freelancer.
-    - **Cuerpo**:
-      ```json
-      {
-        "category": "enum",
-      }
-      ```
-
-
-## 3. Obtener Proveedores Cercanos
-- **GET** /provider/nearby?lat={latitude}&lng={longitude}
-    - **Descripción**: Obtiene una lista de proveedores cercanos a una ubicación dada.
-
----
-
-
-# Endpoints para Freelancer
-## 1. Registro de un freelancer
-
-- **POST** /provider/freelancer/register
-- **Descripción**: Permite a un proveedor registrarse freelancer.
-    - **Cuerpo**:
-      ```json
-      {
-        "firstName": "string",
-        "lastName": "string",
-        "age": "string",
-        "speciality": "string",
-        "experience": "string",
-        "grade": "string",
-      }
-
-
-# Endpoints para Servicios
-
-## 1. Solicitar Servicio
-- **POST** /serviceEntity/solicitate
-    - **Descripción**: Permite a un cliente solicitar un servicio.
-    - **Cuerpo**:
-      ```json
-      {
-        "providerId": "long",
-        "serviceId": "long",
-        "location": "string",
-        "startDate": "datetime",
-        "endDate": "datetime"
-      }
-      ```
-
-## 2. Publicar un Servicio
-- **POST** /serviceEntity/publish
-    - **Descripción**: Permite a un proveedor publicar un servicio.
-    - **Cuerpo**:
-      ```json
-      {
-        "descripcion": "string",
-        "nombre": "string",
-        "tags": "string",
-        "precioSugerido": "decimal",
-        "location": "string"
-      }
-      ```
-
-## 3. Obtener un Servicio
-- **GET** /serviceEntity/{id}
-    - **Descripción**: Obtiene los detalles de un servicio.
-    - **Respuesta**:
-      ```json
-      {
-        "descripcion": "string",
-        "nombre": "string",
-        "tags": "string",
-        "location": "string",
-        "rating": "integer",
-        "provider": "string"
-      }
-      ```
-
-## 4. Borrar un Servicio
-- **DELETE** /serviceEntity/{id}
-    - **Cuerpo**:
-      ```json
-      {
-        "id": "1"
-      }
-      ```
-
-## 5. Actualizar un Servicio
-- **PATCH** /serviceEntity/{id}
-    - **Cuerpo**:
-      ```json
-      {
-        "update1": "value",
-        "update2": "value"
-      }
-      ```
-
-# Endpoints para Calificaciones
-
-## 1. Agregar Reseña
-
-- **POST** /serviceEntity/{id}/review
-    - **Descripción**: Permite a un usuario dejar una reseña sobre un servicio.
-    - **Cuerpo**:
-      ```json
-      {
-        "rating": "integer",
-        "comment": "string",
-        "userId": "long"
-      }
-      ```
-
-## 2. Obtener Reseñas por Servicio
-- **GET** /serviceEntity/{id}/review
-    - **Descripción**: Recupera todas las reseñas asociadas a un servicio específico.
-    - **Respuesta** (Lista):
-      ```json
-      [
-        {
-          "edited": "bool",
-          "rating": "integer",
-          "comment": "string",
-          "userId": "long",
-          "date": "LocalDateTime"
-        }
-      ]
-      ```
-
-## 3. Editar Reseña por Id
-- **PATCH** /serviceEntity/{Id}/reviews/{id}
-    - **Descripción**: Permite editar una reseña específica.
-    - **Cuerpo**:
-      ```json
-      {
-        "rating": "integer",
-        "comment": "string"
-      }
-      ```
-
-## 4. Eliminar Reseña por Id
-- **DELETE** /serviceEntity/{Id}/reviews/{id}
-    - **Descripción**: Permite eliminar una reseña específica.
-      ```json
-      {
-        "reviewId": "long"
-      }
-      ```
-
-
----
-
-# Endpoints para Pagos
-
-## 1. Realizar Pago dentro de la aplicación
-- **POST** /payment
-    - **Descripción**: Permite a un cliente realizar un pago por un servicio.
-    - **Cuerpo**:
-      ```json
-      {
-        "amount": "double",
-        "method": "string",
-        "date": "datetime",
-        "arrangementId": "long"
-      }
-      ```
-
-## 2. Obtener Detalles de Pago
-- **GET** /payment/{id}
-    - **Descripción**: Recupera la información del pago especificado.
-
----
-
-
-# Endopoints de Arrangement
-## 1. Postear un arrangement (hacer un contrato con una empresa)
-- **POST**
-  DESCRIPCION: solicitar un contrato desde cliente
-    - client_id
-    - serviceEntity_id
-
-## 2. DELETE ARRANGEMENTE
-- **DELETE**
-  - 
-
-# Endpoints de Geolocalización
-
-## 1. Obtener Ubicación Actual
-- **GET** /location/current
-    - **Descripción**: Permite al usuario obtener su ubicación actual.
-      ```json
-      {
-        "userId": "long"
-      }
-      ```
