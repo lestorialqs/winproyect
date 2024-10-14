@@ -53,7 +53,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET, "/service", "/service/**", "/service/by-tag").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/service/{idService}/arrangement").hasRole("CLIENT");
 
-                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCE", "ENTERPRISE");
+                    auth.requestMatchers(HttpMethod.POST, "/service").hasAnyAuthority("FREELANCER", "ENTERPRISE");
                     auth.requestMatchers(HttpMethod.GET, "/profile").authenticated();
                     auth.requestMatchers(HttpMethod.PATCH, "/profile").authenticated();
                     auth.requestMatchers("/ws/**").authenticated(); // WebSockets requieren autenticación
