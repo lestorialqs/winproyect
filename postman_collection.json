@@ -1,0 +1,412 @@
+{
+  "info": {
+    "name": "API Documentation - Your Project",
+    "description": "Documentación de la API del proyecto, incluyendo todos los endpoints, ejemplos de funcionamiento y configuración de variables y autorización.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Servicios",
+      "item": [
+        {
+          "name": "Crear Servicio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Nombre del servicio\",\n\t\"description\": \"Descripción del servicio\",\n\t\"tags\": [\"tag1\", \"tag2\"],\n\t\"price\": 100.00,\n\t\"location\": \"Ubicación del servicio\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/service",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service"
+              ]
+            },
+            "description": "Este endpoint permite crear un nuevo servicio. Proporcione los detalles del servicio, incluyendo nombre, descripción, tags, precio y ubicación."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Servicio por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/service/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener los detalles de un servicio específico por su ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Todos los Servicios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/service",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service"
+              ]
+            },
+            "description": "Este endpoint devuelve todos los servicios disponibles."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Servicios por Tag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/service/tag?tag={{tag}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                "tag"
+              ],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "NombreDelTag"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener los servicios filtrados por un tag específico."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registro de Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"email\": \"cliente@example.com\",\n\t\"password\": \"password123\",\n\t\"phoneNumber\": 123456789,\n\t\"address\": \"Dirección del cliente\",\n\t\"firstName\": \"Nombre\",\n\t\"lastName\": \"Apellido\",\n\t\"dni\": 12345678\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register/client",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register",
+                "client"
+              ]
+            },
+            "description": "Este endpoint permite registrar a un cliente en la plataforma."
+          },
+          "response": []
+        },
+        {
+          "name": "Registro de Empresa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"email\": \"empresa@example.com\",\n\t\"password\": \"password123\",\n\t\"phoneNumber\": 987654321,\n\t\"address\": \"Dirección de la empresa\",\n\t\"ruc\": 12345678912,\n\t\"companyName\": \"Nombre de la Empresa\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register/enterprise",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register",
+                "enterprise"
+              ]
+            },
+            "description": "Este endpoint permite registrar una empresa en la plataforma."
+          },
+          "response": []
+        },
+        {
+          "name": "Iniciar Sesión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"email\": \"cliente@example.com\",\n\t\"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Este endpoint permite iniciar sesión en la plataforma y obtener un token de autenticación."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pagos",
+      "item": [
+        {
+          "name": "Crear Pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"amount\": 100.00,\n\t\"method\": \"tarjeta\",\n\t\"date\": \"2024-01-01T00:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/service/{idService}/arrangement/{idArrangement}/payment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                "{idService}",
+                "arrangement",
+                "{idArrangement}",
+                "payment"
+              ],
+              "variable": [
+                {
+                  "key": "idService",
+                  "value": "1"
+                },
+                {
+                  "key": "idArrangement",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite crear un pago asociado a un contrato (arrangement)."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Pago",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/service/arrangement/{idArrangement}/payment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                "arrangement",
+                "{idArrangement}",
+                "payment"
+              ],
+              "variable": [
+                {
+                  "key": "idArrangement",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener un pago asociado a un contrato específico."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reseñas",
+      "item": [
+        {
+          "name": "Crear Reseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"rating\": 5,\n\t\"comment\": \"Excelente servicio!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/service/{serviceId}/review",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                "{serviceId}",
+                "review"
+              ],
+              "variable": [
+                {
+                  "key": "serviceId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite crear una reseña para un servicio específico."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Reseñas de un Servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/service/{serviceId}/review",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "service",
+                "{serviceId}",
+                "review"
+              ],
+              "variable": [
+                {
+                  "key": "serviceId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener todas las reseñas de un servicio."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Localización",
+      "item": [
+        {
+          "name": "Obtener Coordenadas por Dirección",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/location/getcoordinates?address={{address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "location",
+                "getcoordinates"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "1600 Amphitheatre Parkway, Mountain View, CA"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener las coordenadas (latitud y longitud) de una dirección específica."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Coordenadas de un Servicio por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/location/service/{serviceId}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "location",
+                "service",
+                "{serviceId}"
+              ],
+              "variable": [
+                {
+                  "key": "serviceId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Este endpoint permite obtener las coordenadas de un servicio basado en la dirección registrada del mismo."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
+}
