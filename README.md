@@ -1,6 +1,6 @@
 # ATuServicio
 
-IP al Proyecto en AWS: 100.24.236.152
+IP al Proyecto en AWS: 54.80.110.153
 
 ## CS 2031 Desarrollo Basado en Plataformas
 
