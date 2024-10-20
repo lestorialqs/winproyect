@@ -2,6 +2,10 @@
 
 IP al Proyecto en AWS: 54.242.204.69
 
+Link del repositorio creado dentro de la organización CS2031:
+https://github.com/CS2031-DBP/proyecto-backend-proyectodbp-atuservicio.git
+(Los cambios para la siguiente entrega se realizarán en este nuevo repositorio)
+
 ## CS 2031 Desarrollo Basado en Plataformas
 
 ### Integrantes
